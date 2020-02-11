@@ -14,11 +14,20 @@ struct bullet
 	float BA = 0;
 };
 
+struct Sprite
+{
+	void* texture = nullptr;
+
+	Sprite() {}
+	Sprite(void* texture_) : texture(texture_) {}
+	operator void* () const { return texture; }
+};
+
 bullet bullets[10];
-std::vector<void*> Text;
-void* Enemy;
-void* U;
-void* bull;
+std::vector<Sprite> Text;
+Sprite Enemy;
+Sprite U;
+Sprite bull;
 float UX = 400, UY = 550;
 
 void Initialize()
@@ -109,7 +118,7 @@ void Game()
 
 void OldGame()
 {
-	void *sprite = LoadSprite("sprite.png");
+	Sprite sprite = LoadSprite("sprite.png");
 	float size=10;
 	float angle=0;
 	while (!WantQuit() && !IsKeyDown(VK_ESCAPE))
