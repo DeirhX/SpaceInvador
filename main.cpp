@@ -1,21 +1,29 @@
 #include "lib/leetlib.h"
 #include <math.h>
 
+#include <vector>
+
 int x[50];
 int y[50];
 int time=0;
 
 struct bullet
 {
-	float BX,BY,BA;
-	bullet() {BX=BY=BA=0;}
+	float BX = 0;
+	float BY = 0;
+	float BA = 0;
 };
 
 bullet bullets[10];
+std::vector<void*> Text;
+void* Enemy;
+void* U;
+void* bull;
+int UX = 400, UY = 550;
 
-void Game()
+void Initialize()
 {
-	void *Text[]=
+	Text =
 	{
 		LoadSprite("gfx/slet.png"),
 		LoadSprite("gfx/plet.png"),
@@ -34,49 +42,69 @@ void Game()
 	};
 
 	// SETUP
-	int UX=400, UY=550;
-	void *Enemy = LoadSprite("gfx/Little Invader.png");
-	void *U = LoadSprite("gfx/Big Invader.png");
-	void *bull = LoadSprite("gfx/bullet.png");
-	for(int n=0;n<50;++n)
+	Enemy = LoadSprite("gfx/Little Invader.png");
+	U = LoadSprite("gfx/Big Invader.png");
+	bull = LoadSprite("gfx/bullet.png");
+	for (int n = 0; n < 50; ++n)
 	{
-		x[n]=(n%10)*60+120;
-		y[n]=(n/10)*60+70;
+		x[n] = (n % 10) * 60 + 120;
+		y[n] = (n / 10) * 60 + 70;
 	}
-end:
-	++time;
-	if(WantQuit()) return;
-	if(IsKeyDown(VK_ESCAPE)) return;
-	for(int n=0;n<50;++n)
+}
+
+void OldGame();
+void Game()
+{
+	Initialize();
+
+	while (true)
 	{
-		int xo=0,yo=0;
-		int n1=time+n*n+n*n*n;
-		int n2=time+n+n*n+n*n*n*3;
-		if(((n1>>6)&0x7)==0x7)xo+=(1-cos((n1&0x7f)/64.0f*2.f*3.141592))*(20+((n*n)%9));
-		if(((n1>>6)&0x7)==0x7)yo+=(sin((n1&0x7f)/64.0f*2.f*3.141592))*(20+((n*n)%9));
-		if(((n2>>8)&0xf)==0xf)yo+=(1-cos((n2&0xff)/256.0f*2.f*3.141592))*(150+((n*n)%9));
-		DrawSprite(Enemy, x[n]+xo, y[n]+yo, (10+((n)%17)), (10+((n)%17)), 0, 0xffffffff);
+		++time;
+
+		if (WantQuit()) return;
+		if (IsKeyDown(VK_ESCAPE)) return;
+
+		// Compute "AI"
+		for (int n = 0; n < 50; ++n)
+		{
+			int xo = 0, yo = 0;
+			int n1 = time + n * n + n * n * n;
+			int n2 = time + n + n * n + n * n * n * 3;
+			if (((n1 >> 6) & 0x7) == 0x7)xo += (1 - cos((n1 & 0x7f) / 64.0f * 2.f * 3.141592)) * (20 + ((n * n) % 9));
+			if (((n1 >> 6) & 0x7) == 0x7)yo += (sin((n1 & 0x7f) / 64.0f * 2.f * 3.141592)) * (20 + ((n * n) % 9));
+			if (((n2 >> 8) & 0xf) == 0xf)yo += (1 - cos((n2 & 0xff) / 256.0f * 2.f * 3.141592)) * (150 + ((n * n) % 9));
+			DrawSprite(Enemy, x[n] + xo, y[n] + yo, (10 + ((n) % 17)), (10 + ((n) % 17)), 0, 0xffffffff);
+		}
+
+		DrawSprite(U, UX += IsKeyDown(VK_LEFT) ? -7 : IsKeyDown(VK_RIGHT) ? 7 : 0, UY, 50, 50, 3.141592 + sin(time * 0.1) * 0.1, 0xffffffff);
+
+		// FIRE
+		static int b = 0;
+		static int count = 0;
+		if (count) --count;
+		if (!IsKeyDown(VK_SPACE)) count = 0;
+		if (IsKeyDown(VK_SPACE) && count == 0)
+		{ 
+			bullets[b].BX = UX; 
+			bullets[b].BY = UY; 
+			b = (b + 1) % 10; 
+			count = 15;
+		}
+
+		// Render bullets
+		for (int n = 0; n < 10; ++n)
+		{
+			DrawSprite(bull, bullets[n].BX, bullets[n].BY -= 4, 10, 10, bullets[n].BA += 0.1f, 0xffffffff);
+		}
+
+		for (int n = 0; n < strlen("space invaders"); ++n)
+		{
+			if (n != 5)
+				DrawSprite(Text[n], n * 40 + 150, 30, 20, 20, sin(time * 0.1) * n * 0.01);
+		}
+
+		Flip();
 	}
-	
-	DrawSprite(U, UX+=IsKeyDown(VK_LEFT)?-7:IsKeyDown(VK_RIGHT)?7:0, UY, 50, 50, 3.141592+sin(time*0.1)*0.1, 0xffffffff);
-
-	// FIRE
-	static int b=0;
-	static int count=0;
-	if(count) --count;
-	if(!IsKeyDown(VK_SPACE)) count=0;
-	if(IsKeyDown(VK_SPACE) && count==0) {bullets[b].BX=UX; bullets[b].BY=UY; b=(b+1)%10; count=15;}
-
-	for(int n=0;n<10;++n)
-	{
-		DrawSprite(bull, bullets[n].BX, bullets[n].BY-=4, 10, 10, bullets[n].BA+=0.1f, 0xffffffff);
-	}
-
-	for(int n=0;n<strlen("space invaders");++n) if(n!=5)DrawSprite(Text[n], n*40+150,30,20,20,sin(time*0.1)*n*0.01);
-
-	Flip();
-    
-	goto end;
 }
 
 void OldGame()
