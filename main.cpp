@@ -2,6 +2,8 @@
 #include <math.h>
 
 #include <vector>
+#include <map>
+#include <string>
 
 int x[50];
 int y[50];
@@ -24,31 +26,36 @@ struct Sprite
 };
 
 bullet bullets[10];
-std::vector<Sprite> Text;
+std::map<char, Sprite> Glyphs;
 Sprite Enemy;
 Sprite U;
 Sprite bull;
 float UX = 400, UY = 550;
 
+using namespace std::string_literals;
+
+Sprite LoadGlyph(char glyph)
+{
+	std::string path = "gfx/";
+	if (glyph >= 'a' && glyph <= 'z')
+		path += glyph + "let.png"s;
+	else if (glyph >= '0' && glyph <= '9')
+		path += "num"s + glyph + ".png"s;
+	else
+		throw std::exception("Non-existent glyph requested");
+
+	return LoadSprite(path.c_str());
+}
+
 void Initialize()
 {
-	Text =
-	{
-		LoadSprite("gfx/slet.png"),
-		LoadSprite("gfx/plet.png"),
-		LoadSprite("gfx/alet.png"),
-		LoadSprite("gfx/clet.png"),
-		LoadSprite("gfx/elet.png"),
-		0,
-		LoadSprite("gfx/ilet.png"),
-		LoadSprite("gfx/nlet.png"),
-		LoadSprite("gfx/vlet.png"),
-		LoadSprite("gfx/alet.png"),
-		LoadSprite("gfx/dlet.png"),
-		LoadSprite("gfx/elet.png"),
-		LoadSprite("gfx/rlet.png"),
-		LoadSprite("gfx/slet.png")
-	};
+	for (char c = 'a'; c <= 'z'; ++c) {
+		Glyphs[c] = LoadGlyph(c);
+	}
+	for (char c = '0'; c <= '9'; ++c) {
+		Glyphs[c] = LoadGlyph(c);
+	}
+	Glyphs[' '] = {};
 
 	// SETUP
 	Enemy = LoadSprite("gfx/Little Invader.png");
@@ -106,10 +113,11 @@ void Game()
 			DrawSprite(bull, bullets[n].BX, bullets[n].BY -= 4, 10, 10, bullets[n].BA += 0.1f, 0xffffffff);
 		}
 
-		for (unsigned int n = 0; n < strlen("space invaders"); ++n)
+		const char title[] = "space invaders";
+		for (unsigned int n = 0; n < strlen(title); ++n)
 		{
 			if (n != 5)
-				DrawSprite(Text[n], (float)(n * 40 + 150), 30, 20, 20, (float)(sin(time * 0.1) * n * 0.01));
+				DrawSprite(Glyphs[title[n]], (float)(n * 40 + 150), 30, 20, 20, (float)(sin(time * 0.1) * n * 0.01));
 		}
 
 		Flip();
