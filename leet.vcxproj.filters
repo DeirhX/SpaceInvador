@@ -18,9 +18,10 @@
     <ClInclude Include="lib\leetlib.h">
       <Filter>library</Filter>
     </ClInclude>
-    <ClInclude Include="PhatLeet.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="phatleetlib.h" />
+    <ClInclude Include="vector.h" />
   </ItemGroup>
 </Project>

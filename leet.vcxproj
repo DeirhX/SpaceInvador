@@ -111,8 +111,9 @@
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="lib\leetlib.h" />
+    <ClInclude Include="vector.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="PhatLeet.h" />
+    <ClInclude Include="phatleetlib.h" />
     <ClInclude Include="Sprites.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
