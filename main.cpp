@@ -6,6 +6,5 @@
 
 void StartGame()
 {
-	auto game = std::make_unique<Game>(); // We'll survive this dynamic allocation :)
-	game->GameLoop();
+	GetGame().GameLoop(); // Created on first use
 }

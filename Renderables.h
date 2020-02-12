@@ -26,7 +26,7 @@ public:
 class Renderable : public Entity
 {
 
-private:
+protected:
 	Sprite sprite;
 	Position location;			// True origin in world
 	Position transform = {};	// For temporary offsets
@@ -41,7 +41,7 @@ private:
 
 public:
 	Renderable(Sprite sprite, Position base, Size size = { 10.f }) : sprite(sprite), location(base), size(size) {}
-	// Renderable& operator= (const Renderable& other) = default; // automatic
+	Renderable& operator= (const Renderable& other) = default; // automatic
 	// void SetTransform(Position newOffset) { transform = newOffset; pos_dirty = true; }
 	void SetSize(float newSize) { size = { newSize, newSize }; }
 	void SetSize(Size newSize) { size = newSize; }
@@ -102,7 +102,7 @@ public:
 	{
 		auto& dead_item = std::find_if(vector.begin(), vector.end(), [this](auto it) { return it.IsDead(); });
 		if (dead_item != vector.end()) {
-			*dead_item = item;
+			*dead_item = TRenderable(item);
 			return *dead_item;
 		}
 		return vector.emplace_back(std::forward<TRenderable&&>(item));
@@ -122,5 +122,4 @@ public:
 	iterator end() { return iterator(vector, vector.end()); }
 };
 
-using Player = Renderable;
 using Bullet = Renderable;

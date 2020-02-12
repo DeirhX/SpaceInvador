@@ -1,30 +1,16 @@
 #include "pch.h"
 #include "Game.h"
-#include "phatleetlib.h"
+#include "PhatLeetLib.h"
 
 Game::Game() :
-	player { sprites.Player, {400.f, 550.f}, {50.f} }
+	world (Player { sprites.Player, {400.f, 550.f}, {50.f} })
 {
 	for (int n = 0; n < 50; ++n)
 	{
-		invaders.Add({ sprites.Enemy,
-							  Position{ (n % 10) * 60.f + 120,(n / 10) * 60.f + 70 },
-							  (int)invaders.Size() });
+		world.invaders.Add({ sprites.Enemy,
+							 Position{ (n % 10) * 60.f + 120,(n / 10) * 60.f + 70 },
+							 (int)world.invaders.Size() });
 	}
-}
-
-void Game::AdvanceWorld(float delta)
-{
-	player.Advance(delta);
-	for (auto& bullet : bullets) bullet.Advance(delta);
-	for (auto& invader: invaders) invader.Advance(delta);
-}
-
-void Game::RenderWorld()
-{
-	DrawSprite(player);
-	for (auto& bullet : bullets) DrawSprite(bullet);
-	for (auto& invader : invaders) DrawSprite(invader);
 }
 
 void Game::RenderTitle(int time)
@@ -43,21 +29,17 @@ void Game::RenderTitle(int time)
 }
 
 
-void Game::ProcessFire()
+void Game::ProcessInput()
 {
+	if (WantQuit()) return;
+	if (IsKeyDown(VK_ESCAPE)) return;
+
+	// Player movement
+	auto movement_offset = Position{ IsKeyDown(VK_LEFT) ? -7.0f : IsKeyDown(VK_RIGHT) ? 7.0f : 0, 0 };
+	world.player.Location() += movement_offset;
+
 	// FIRE
-	static int b = 0;
-	static int count = 0;
-	if (count) --count;
-	if (!IsKeyDown(VK_SPACE)) count = 0;
-	if (IsKeyDown(VK_SPACE) && count == 0)
-	{
-		auto& bullet = bullets.Add({ sprites.Bullet, player.GetProjection(), {10} });
-		bullet.Speed() = { 0, -2.5f };
-		bullet.LifeDrain() = 0.5f;
-		bullet.Rotation() = math::half_pi;
-		count = 15;
-	}
+	
 }
 
 
@@ -67,20 +49,20 @@ void Game::GameLoop()
 	{
 		++time;
 
-		if (WantQuit()) return;
-		if (IsKeyDown(VK_ESCAPE)) return;
+		// Process Input
+		ProcessInput();
 
-		AdvanceWorld(1.0f);
-
-		auto movement_offset = Position{ IsKeyDown(VK_LEFT) ? -7.0f : IsKeyDown(VK_RIGHT) ? 7.0f : 0, 0 };
-		player.Location() += movement_offset;
-
-		ProcessFire();
-
-		RenderWorld();
+		world.Advance(1.0f);
+		world.Render();
 
 		RenderTitle(time);
 
 		Flip();
 	}
+}
+
+Game& GetGame()
+{
+	static Game game;
+	return game;
 }

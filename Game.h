@@ -3,24 +3,22 @@
 #include "vector.h"
 #include "Renderables.h"
 #include "Invader.h"
+#include "World.h"
 
 
 class Game
 {
+public:
 	Sprites sprites;
-
-	Renderables<Invader> invaders;
-	Renderables<Bullet> bullets;
-	Player player;
+	World world;
 	int time = 0;
-
 public:
 	Game();
-	void AdvanceWorld(float delta);
-	void RenderWorld();
 	
 	void RenderTitle(int time);
-	void ProcessFire();
+	void ProcessInput();
 	void GameLoop();
 };
+
+Game& GetGame();
 
