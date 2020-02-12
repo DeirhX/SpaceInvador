@@ -68,7 +68,61 @@ void Initialize()
 	}
 }
 
-void OldGame();
+void RenderTitle(int time)
+{
+	static const char title[] = "space invaders";
+	for (unsigned int n = 0; n < strlen(title); ++n)
+	{
+		auto glyph = Glyphs[title[n]]; 
+		if (glyph)	// Avoid unsupported characters
+		{	
+			DrawSprite(glyph, (float)(n * 40 + 150), 30, 
+				20, 20, 
+				(float)(sin(time * 0.1) * n * 0.01));
+		}
+	}
+}
+
+void RenderBullets()
+{
+	// Render bullets
+	for (int n = 0; n < 10; ++n)
+	{
+		DrawSprite(bull, bullets[n].BX, bullets[n].BY -= 4, 10, 10, bullets[n].BA += 0.1f, 0xffffffff);
+	}
+}
+
+void ProcessFire()
+{
+	// FIRE
+	static int b = 0;
+	static int count = 0;
+	if (count) --count;
+	if (!IsKeyDown(VK_SPACE)) count = 0;
+	if (IsKeyDown(VK_SPACE) && count == 0)
+	{ 
+		bullets[b].BX = (float)UX;
+		bullets[b].BY = (float)UY;
+		b = (b + 1) % 10; 
+		count = 15;
+	}
+}
+
+void MoveAndRenderEnemies(int time)
+{
+	// Compute "AI"
+	for (int n = 0; n < 50; ++n)
+	{
+		int xo = 0, yo = 0;
+		int n1 = time + n * n + n * n * n;
+		int n2 = time + n + n * n + n * n * n * 3;
+		if (((n1 >> 6) & 0x7) == 0x7)xo += (int)((1 - cos((n1 & 0x7f) / 64.0f * 2.f * 3.141592)) * (20 + ((n * n) % 9)));
+		if (((n1 >> 6) & 0x7) == 0x7)yo += (int)((sin((n1 & 0x7f) / 64.0f * 2.f * 3.141592)) * (20 + ((n * n) % 9)));
+		if (((n2 >> 8) & 0xf) == 0xf)yo += (int)((1 - cos((n2 & 0xff) / 256.0f * 2.f * 3.141592)) * (150 + ((n * n) % 9)));
+		DrawSprite(Enemy, (float)x[n] + xo, (float)y[n] + yo, (float)(10 + ((n) % 17)), (float)(10 + ((n) % 17)), 0, 0xffffffff);
+	}
+}
+
 void Game()
 {
 	Initialize();
@@ -80,68 +134,16 @@ void Game()
 		if (WantQuit()) return;
 		if (IsKeyDown(VK_ESCAPE)) return;
 
-		// Compute "AI"
-		for (int n = 0; n < 50; ++n)
-		{
-			int xo = 0, yo = 0;
-			int n1 = time + n * n + n * n * n;
-			int n2 = time + n + n * n + n * n * n * 3;
-			if (((n1 >> 6) & 0x7) == 0x7)xo += (int)((1 - cos((n1 & 0x7f) / 64.0f * 2.f * 3.141592)) * (20 + ((n * n) % 9)));
-			if (((n1 >> 6) & 0x7) == 0x7)yo += (int)((sin((n1 & 0x7f) / 64.0f * 2.f * 3.141592)) * (20 + ((n * n) % 9)));
-			if (((n2 >> 8) & 0xf) == 0xf)yo += (int)((1 - cos((n2 & 0xff) / 256.0f * 2.f * 3.141592)) * (150 + ((n * n) % 9)));
-			DrawSprite(Enemy, (float)x[n] + xo, (float)y[n] + yo, (float)(10 + ((n) % 17)), (float)(10 + ((n) % 17)), 0, 0xffffffff);
-		}
+		MoveAndRenderEnemies(time);
 
 		DrawSprite(U, UX += IsKeyDown(VK_LEFT) ? -7 : IsKeyDown(VK_RIGHT) ? 7 : 0, UY, 50, 50, (float)(3.141592 + sin(time * 0.1) * 0.1), 0xffffffff);
 
-		// FIRE
-		static int b = 0;
-		static int count = 0;
-		if (count) --count;
-		if (!IsKeyDown(VK_SPACE)) count = 0;
-		if (IsKeyDown(VK_SPACE) && count == 0)
-		{ 
-			bullets[b].BX = (float)UX;
-			bullets[b].BY = (float)UY;
-			b = (b + 1) % 10; 
-			count = 15;
-		}
+		ProcessFire();
 
-		// Render bullets
-		for (int n = 0; n < 10; ++n)
-		{
-			DrawSprite(bull, bullets[n].BX, bullets[n].BY -= 4, 10, 10, bullets[n].BA += 0.1f, 0xffffffff);
-		}
+		RenderBullets();
 
-		const char title[] = "space invaders";
-		for (unsigned int n = 0; n < strlen(title); ++n)
-		{
-			if (n != 5)
-				DrawSprite(Glyphs[title[n]], (float)(n * 40 + 150), 30, 20, 20, (float)(sin(time * 0.1) * n * 0.01));
-		}
+		RenderTitle(time);
 
-		Flip();
-	}
-}
-
-void OldGame()
-{
-	Sprite sprite = LoadSprite("sprite.png");
-	float size=10;
-	float angle=0;
-	while (!WantQuit() && !IsKeyDown(VK_ESCAPE))
-	{
-		angle+=0.01f;
-		float mx,my;
-		GetMousePos(mx,my);
-		DWORD col=0xffffffff; // white
-		if (IsKeyDown(VK_LBUTTON)) col=0xffff0000; // solid red
-		if (IsKeyDown(VK_RBUTTON)) col=0x8000ff00; // 50% transparent green
-		if (IsKeyDown(VK_UP)) size++;
-		if (IsKeyDown(VK_DOWN)) size--;
-		
-		DrawSprite(sprite,400,300,100,100, angle);
-		DrawSprite(sprite, mx,my, size,size, 0, col);	
 		Flip();
 	}
 }
