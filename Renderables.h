@@ -67,11 +67,7 @@ public:
 	[[nodiscard]] float GetRotation() const { return rotation; }
 	[[nodiscard]] DWORD GetTint() const { return tint; }
 
-	void Advance (float delta) override
-	{
-		Entity::Advance(delta);
-		Location() += speed * delta;
-	}
+	void Advance(float delta) override;
 };
 
 // Effective container for storing an array of renderables - deleting does not shift, dead objects can be reused later.

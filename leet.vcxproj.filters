@@ -17,6 +17,7 @@
     <ClCompile Include="Invader.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Collider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\leetlib.h">
@@ -31,5 +32,6 @@
     <ClInclude Include="Invader.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Collider.h" />
   </ItemGroup>
 </Project>

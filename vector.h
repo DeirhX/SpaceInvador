@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 
 namespace math
 {
@@ -33,4 +34,22 @@ struct Size
 	Size() = default;
 	Size(float x) : x(x), y(x) {}
 	Size(float x, float y) : x(x), y(y) {}
+};
+
+struct Boundary
+{
+	Position min;
+	Position max;
+
+	[[nodiscard]] bool IsInside(Position pos) const
+	{
+		return pos.x >= min.x && pos.x <= max.x
+			&& pos.y >= min.y && pos.y <= max.y;
+	}
+
+	void MakeInside(Position& pos) const
+	{
+		pos.x = std::clamp(pos.x, min.x, max.x);
+		pos.y = std::clamp(pos.y, min.y, max.y);
+	}
 };

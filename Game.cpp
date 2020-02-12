@@ -35,9 +35,7 @@ void Game::ProcessInput()
 	if (IsKeyDown(VK_ESCAPE)) return;
 
 	// Player movement
-	auto movement_offset = Position{ IsKeyDown(VK_LEFT) ? -7.0f : IsKeyDown(VK_RIGHT) ? 7.0f : 0, 0 };
-	world.player.Location() += movement_offset;
-
+	
 	// FIRE
 	
 }

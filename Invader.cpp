@@ -11,4 +11,6 @@ void Invader::Advance(float delta)
 	if (((n1 >> 6) & 0x7) == 0x7)yo += (int)((sin((n1 & 0x7f) / 64.0f * math::two_pi)) * (20 + ((seed * seed) % 9)));
 	if (((n2 >> 8) & 0xf) == 0xf)yo += (int)((1 - cos((n2 & 0xff) / 256.0f * math::two_pi)) * (150 + ((seed * seed) % 9)));
 	Transform() = { (float)xo, (float)yo };
+
+	Renderable::Advance(delta);
 }
