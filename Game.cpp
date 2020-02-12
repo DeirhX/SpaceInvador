@@ -31,9 +31,10 @@ void Game::RenderTitle(int time)
 void Game::RenderBullets()
 {
 	// Render bullets
-	for (int n = 0; n < 10; ++n)
+	for (auto& bullet : bullets)
 	{
-		DrawSprite(sprites.Bullet, bullets[n].BX, bullets[n].BY -= 4, 10, 10, bullets[n].BA += 0.1f, 0xffffffff);
+		bullet.Location().y -= 2.0f;
+		DrawSprite(bullet, 0, 0xffffffff);
 	}
 }
 
@@ -46,9 +47,7 @@ void Game::ProcessFire()
 	if (!IsKeyDown(VK_SPACE)) count = 0;
 	if (IsKeyDown(VK_SPACE) && count == 0)
 	{
-		bullets[b].BX = player.GetProjection().x;
-		bullets[b].BY = player.GetProjection().y;
-		b = (b + 1) % 10;
+		auto bullet = bullets.Add({ sprites.Bullet, player.GetProjection(), {10} });
 		count = 15;
 	}
 }

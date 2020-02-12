@@ -9,16 +9,9 @@ class Game
 	Sprites sprites;
 
 	std::vector<Invader> invaders;
+	Renderables<Bullet> bullets;
 	Player player;
 	int time = 0;
-
-	struct bullet
-	{
-		float BX = 0;
-		float BY = 0;
-		float BA = 0;
-	};
-	bullet bullets[10];
 
 public:
 	Game();
