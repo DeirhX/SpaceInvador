@@ -20,6 +20,13 @@ void Game::AdvanceWorld(float delta)
 	for (auto& invader: invaders) invader.Advance(delta);
 }
 
+void Game::RenderWorld()
+{
+	DrawSprite(player);
+	for (auto& bullet : bullets) DrawSprite(bullet);
+	for (auto& invader : invaders) DrawSprite(invader);
+}
+
 void Game::RenderTitle(int time)
 {
 	static const char title[] = "space invaders";
@@ -35,14 +42,6 @@ void Game::RenderTitle(int time)
 	}
 }
 
-void Game::RenderBullets()
-{
-	// Render bullets
-	for (auto& bullet : bullets)
-	{
-		DrawSprite(bullet, 0, 0xffffffff);
-	}
-}
 
 void Game::ProcessFire()
 {
@@ -55,19 +54,12 @@ void Game::ProcessFire()
 	{
 		auto& bullet = bullets.Add({ sprites.Bullet, player.GetProjection(), {10} });
 		bullet.Speed() = { 0, -2.5f };
-		bullet.LifeDrain() = 1.0f;
+		bullet.LifeDrain() = 0.5f;
+		bullet.Rotation() = math::half_pi;
 		count = 15;
 	}
 }
 
-void Game::MoveAndRenderEnemies(int time)
-{
-	// Compute "AI"
-	for (int n = 0; n < 50; ++n)
-	{
-		DrawSprite(invaders[n], 0, 0xffffffff);
-	}
-}
 
 void Game::GameLoop()
 {
@@ -78,17 +70,14 @@ void Game::GameLoop()
 		if (WantQuit()) return;
 		if (IsKeyDown(VK_ESCAPE)) return;
 
-		MoveAndRenderEnemies(time);
-
 		AdvanceWorld(1.0f);
 
 		auto movement_offset = Position{ IsKeyDown(VK_LEFT) ? -7.0f : IsKeyDown(VK_RIGHT) ? 7.0f : 0, 0 };
 		player.Location() += movement_offset;
-		DrawSprite(player, (float)(3.141592 + sin(time * 0.1) * 0.1), 0xffffffff);
 
 		ProcessFire();
 
-		RenderBullets();
+		RenderWorld();
 
 		RenderTitle(time);
 

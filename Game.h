@@ -17,10 +17,10 @@ class Game
 public:
 	Game();
 	void AdvanceWorld(float delta);
+	void RenderWorld();
+	
 	void RenderTitle(int time);
-	void RenderBullets();
 	void ProcessFire();
-	void MoveAndRenderEnemies(int time);
 	void GameLoop();
 };
 
