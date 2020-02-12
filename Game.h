@@ -1,11 +1,50 @@
 #pragma once
 #include "Sprites.h"
 
+struct Position
+{
+	float x = 0;
+	float y = 0;
+
+	Position() = default;
+	Position(float x, float y) : x(x), y(y) {}
+	Position operator+ (const Position& other) const { return { x + other.x, y + other.y }; }
+	Position operator- (const Position& other) const { return { x - other.x, y - other.y }; }
+};
+
+class Invader
+{
+public:
+	const Sprite sprite;
+	const Position base_pos;
+private:
+	float size = 10;
+	Position offset_pos = {};
+	
+	// Cache for multiple accesses per frame (I know it's not worth it for this simple game ;)
+	mutable bool pos_dirty = true;
+	mutable Position projected_pos = {};
+
+public:
+	Invader(Sprite sprite, Position base, float size = 10) : sprite(sprite), base_pos(base), size(size) {}
+	void SetOffset(Position newOffset) { offset_pos = newOffset; pos_dirty = true; }
+	void SetSize(float newSize) { size = newSize; }
+	[[nodiscard]] float GetSize() const { return size; }
+	[[nodiscard]] Position GetOffset() const { return offset_pos; };
+	[[nodiscard]] Position GetPosition() const
+	{
+		// Compute only if changed
+		if (pos_dirty)
+			projected_pos = base_pos + offset_pos;
+
+		pos_dirty = false;
+		return projected_pos;
+	} 
+};
+
 class Game
 {
-
-	int x[50];
-	int y[50];
+	std::vector<Invader> invaders;
 	int time = 0;
 
 	struct bullet
@@ -19,92 +58,11 @@ class Game
 	Sprites sprites;
 
 public:
-	Game()
-	{
-		// SETUP
-		for (int n = 0; n < 50; ++n)
-		{
-			x[n] = (n % 10) * 60 + 120;
-			y[n] = (n / 10) * 60 + 70;
-		}
-	}
-
-	void RenderTitle(int time)
-	{
-		static const char title[] = "space invaders";
-		for (unsigned int n = 0; n < strlen(title); ++n)
-		{
-			auto glyph = sprites.Glyphs[title[n]];
-			if (glyph)	// Avoid unsupported characters
-			{
-				DrawSprite(glyph, (float)(n * 40 + 150), 30,
-					20, 20,
-					(float)(sin(time * 0.1) * n * 0.01));
-			}
-		}
-	}
-
-	void RenderBullets()
-	{
-		// Render bullets
-		for (int n = 0; n < 10; ++n)
-		{
-			DrawSprite(sprites.Bullet, bullets[n].BX, bullets[n].BY -= 4, 10, 10, bullets[n].BA += 0.1f, 0xffffffff);
-		}
-	}
-
-	void ProcessFire()
-	{
-		// FIRE
-		static int b = 0;
-		static int count = 0;
-		if (count) --count;
-		if (!IsKeyDown(VK_SPACE)) count = 0;
-		if (IsKeyDown(VK_SPACE) && count == 0)
-		{
-			bullets[b].BX = (float)UX;
-			bullets[b].BY = (float)UY;
-			b = (b + 1) % 10;
-			count = 15;
-		}
-	}
-
-	void MoveAndRenderEnemies(int time)
-	{
-		// Compute "AI"
-		for (int n = 0; n < 50; ++n)
-		{
-			int xo = 0, yo = 0;
-			int n1 = time + n * n + n * n * n;
-			int n2 = time + n + n * n + n * n * n * 3;
-			if (((n1 >> 6) & 0x7) == 0x7)xo += (int)((1 - cos((n1 & 0x7f) / 64.0f * 2.f * 3.141592)) * (20 + ((n * n) % 9)));
-			if (((n1 >> 6) & 0x7) == 0x7)yo += (int)((sin((n1 & 0x7f) / 64.0f * 2.f * 3.141592)) * (20 + ((n * n) % 9)));
-			if (((n2 >> 8) & 0xf) == 0xf)yo += (int)((1 - cos((n2 & 0xff) / 256.0f * 2.f * 3.141592)) * (150 + ((n * n) % 9)));
-			DrawSprite(sprites.Enemy, (float)x[n] + xo, (float)y[n] + yo, (float)(10 + ((n) % 17)), (float)(10 + ((n) % 17)), 0, 0xffffffff);
-		}
-	}
-
-	void GameLoop()
-	{
-		while (true)
-		{
-			++time;
-
-			if (WantQuit()) return;
-			if (IsKeyDown(VK_ESCAPE)) return;
-
-			MoveAndRenderEnemies(time);
-
-			DrawSprite(sprites.Player, UX += IsKeyDown(VK_LEFT) ? -7 : IsKeyDown(VK_RIGHT) ? 7 : 0, UY, 50, 50, (float)(3.141592 + sin(time * 0.1) * 0.1), 0xffffffff);
-
-			ProcessFire();
-
-			RenderBullets();
-
-			RenderTitle(time);
-
-			Flip();
-		}
-	}
+	Game();
+	void RenderTitle(int time);
+	void RenderBullets();
+	void ProcessFire();
+	void MoveAndRenderEnemies(int time);
+	void GameLoop();
 };
 
