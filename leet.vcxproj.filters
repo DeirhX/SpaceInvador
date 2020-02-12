@@ -13,6 +13,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Renderables.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\leetlib.h">
@@ -21,7 +22,8 @@
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="phatleetlib.h" />
-    <ClInclude Include="vector.h" />
+    <ClInclude Include="Renderables.h" />
+    <ClInclude Include="Vector.h" />
+    <ClInclude Include="PhatLeetLib.h" />
   </ItemGroup>
 </Project>

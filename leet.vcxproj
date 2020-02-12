@@ -106,14 +106,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Renderables.cpp" />
     <ClCompile Include="Sprites.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="lib\leetlib.h" />
-    <ClInclude Include="vector.h" />
+    <ClInclude Include="Renderables.h" />
+    <ClInclude Include="Vector.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="phatleetlib.h" />
+    <ClInclude Include="PhatLeetLib.h" />
     <ClInclude Include="Sprites.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

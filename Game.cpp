@@ -2,7 +2,8 @@
 #include "Game.h"
 #include "phatleetlib.h"
 
-Game::Game()
+Game::Game() :
+	player { sprites.Player, {400.f, 550.f}, {50.f} }
 {
 	for (int n = 0; n < 50; ++n)
 	{
@@ -45,8 +46,8 @@ void Game::ProcessFire()
 	if (!IsKeyDown(VK_SPACE)) count = 0;
 	if (IsKeyDown(VK_SPACE) && count == 0)
 	{
-		bullets[b].BX = (float)UX;
-		bullets[b].BY = (float)UY;
+		bullets[b].BX = player.GetProjection().x;
+		bullets[b].BY = player.GetProjection().y;
 		b = (b + 1) % 10;
 		count = 15;
 	}
@@ -63,7 +64,7 @@ void Game::MoveAndRenderEnemies(int time)
 		if (((n1 >> 6) & 0x7) == 0x7)xo += (int)((1 - cos((n1 & 0x7f) / 64.0f * 2.f * 3.141592)) * (20 + ((n * n) % 9)));
 		if (((n1 >> 6) & 0x7) == 0x7)yo += (int)((sin((n1 & 0x7f) / 64.0f * 2.f * 3.141592)) * (20 + ((n * n) % 9)));
 		if (((n2 >> 8) & 0xf) == 0xf)yo += (int)((1 - cos((n2 & 0xff) / 256.0f * 2.f * 3.141592)) * (150 + ((n * n) % 9)));
-		invaders[n].SetOffset({ (float)xo, (float)yo });
+		invaders[n].SetTransform({ (float)xo, (float)yo });
 		invaders[n].SetSize((float)(10 + ((n) % 17)));
 		DrawSprite(invaders[n], 0, 0xffffffff);
 	}
@@ -80,7 +81,9 @@ void Game::GameLoop()
 
 		MoveAndRenderEnemies(time);
 
-		DrawSprite(sprites.Player, UX += IsKeyDown(VK_LEFT) ? -7 : IsKeyDown(VK_RIGHT) ? 7 : 0, UY, 50, 50, (float)(3.141592 + sin(time * 0.1) * 0.1), 0xffffffff);
+		auto movement_offset = Position{ IsKeyDown(VK_LEFT) ? -7.0f : IsKeyDown(VK_RIGHT) ? 7.0f : 0, 0 };
+		player.Location() += movement_offset;
+		DrawSprite(player, (float)(3.141592 + sin(time * 0.1) * 0.1), 0xffffffff);
 
 		ProcessFire();
 
