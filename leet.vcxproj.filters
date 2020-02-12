@@ -14,6 +14,7 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Renderables.cpp" />
+    <ClCompile Include="Invader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\leetlib.h">
@@ -25,5 +26,6 @@
     <ClInclude Include="Renderables.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="PhatLeetLib.h" />
+    <ClInclude Include="Invader.h" />
   </ItemGroup>
 </Project>

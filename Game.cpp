@@ -9,7 +9,7 @@ Game::Game() :
 	{
 		invaders.Add({ sprites.Enemy,
 							  Position{ (n % 10) * 60.f + 120,(n / 10) * 60.f + 70 },
-							  10.f });
+							  (int)invaders.Size() });
 	}
 }
 
@@ -65,14 +65,6 @@ void Game::MoveAndRenderEnemies(int time)
 	// Compute "AI"
 	for (int n = 0; n < 50; ++n)
 	{
-		int xo = 0, yo = 0;
-		int n1 = time + n * n + n * n * n;
-		int n2 = time + n + n * n + n * n * n * 3;
-		if (((n1 >> 6) & 0x7) == 0x7)xo += (int)((1 - cos((n1 & 0x7f) / 64.0f * 2.f * 3.141592)) * (20 + ((n * n) % 9)));
-		if (((n1 >> 6) & 0x7) == 0x7)yo += (int)((sin((n1 & 0x7f) / 64.0f * 2.f * 3.141592)) * (20 + ((n * n) % 9)));
-		if (((n2 >> 8) & 0xf) == 0xf)yo += (int)((1 - cos((n2 & 0xff) / 256.0f * 2.f * 3.141592)) * (150 + ((n * n) % 9)));
-		invaders[n].Transform() = { (float)xo, (float)yo };
-		invaders[n].SetSize((float)(10 + ((n) % 17)));
 		DrawSprite(invaders[n], 0, 0xffffffff);
 	}
 }

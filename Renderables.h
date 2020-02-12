@@ -28,11 +28,12 @@ class Renderable : public Entity
 
 private:
 	Sprite sprite;
-	Position location;        // True origin in world
-	Position transform = {};  // For temporary offsets
-	Vector2 speed = {};	  // For auto movement
-	Size size = { 10.f, 10.f };
-	float rotation = 0;
+	Position location;			// True origin in world
+	Position transform = {};	// For temporary offsets
+	Vector2 speed = {};			// For auto movement
+	Size size = { 10.f, 10.f }; // Size of entity 
+	float rotation = 0;			// Rotation of rendered sprite
+	DWORD tint = 0xffffffff;	// Color mask
 
 	// Cache for multiple accesses per frame (I know it's not worth it for this simple game ;)
 	mutable bool pos_dirty = true;
@@ -47,6 +48,8 @@ public:
 	Position& Location() { pos_dirty = true; return location; };
 	Position& Transform() { pos_dirty = true; return transform; }
 	Vector2& Speed() { return speed; }
+	float& Rotation() { return rotation; }
+	DWORD& Tint() { return tint; }
 	[[nodiscard]] Sprite GetSprite() const { return sprite; }
 	[[nodiscard]] Size GetSize() const { return size; }
 	[[nodiscard]] Vector2 GetSpeed() const { return speed; }
@@ -61,8 +64,10 @@ public:
 		pos_dirty = false;
 		return projected_pos;
 	}
+	[[nodiscard]] float GetRotation() const { return rotation; }
+	[[nodiscard]] DWORD GetTint() const { return tint; }
 
-	virtual void Advance (float delta) override
+	void Advance (float delta) override
 	{
 		Entity::Advance(delta);
 		Location() += speed * delta;
@@ -91,6 +96,7 @@ class Renderables
 
 	std::vector<TRenderable> vector;
 public:
+	auto Size() { return vector.size(); };
 	TRenderable& operator[](int index) { return vector[index]; } // TODO: Make a custom iterator that skips dead items
 	TRenderable& Add(TRenderable&& item)
 	{
@@ -116,6 +122,5 @@ public:
 	iterator end() { return iterator(vector, vector.end()); }
 };
 
-using Invader = Renderable;
 using Player = Renderable;
 using Bullet = Renderable;
