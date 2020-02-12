@@ -634,7 +634,7 @@ AdjustWindowRect(&r,style,false);
 
 			//InitDirectInput( hWnd );			
 			
-            Game();
+            StartGame();
         }
     }
 

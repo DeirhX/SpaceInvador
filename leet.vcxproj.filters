@@ -16,10 +16,23 @@
     <ClCompile Include="lib\leetlib.cpp">
       <Filter>library</Filter>
     </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\leetlib.h">
       <Filter>library</Filter>
     </ClInclude>
+    <ClInclude Include="PhatLeet.h" />
+    <ClInclude Include="Sprites.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Game.h" />
   </ItemGroup>
 </Project>
