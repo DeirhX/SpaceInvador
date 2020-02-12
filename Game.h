@@ -8,13 +8,14 @@ class Game
 {
 	Sprites sprites;
 
-	std::vector<Invader> invaders;
+	Renderables<Invader> invaders;
 	Renderables<Bullet> bullets;
 	Player player;
 	int time = 0;
 
 public:
 	Game();
+	void AdvanceWorld(float delta);
 	void RenderTitle(int time);
 	void RenderBullets();
 	void ProcessFire();
