@@ -5,6 +5,7 @@ enum class EntityType
 	Player,
 	PlayerProjectile,
 	Invader,
+	Decoration,
 };
 
 class Entity

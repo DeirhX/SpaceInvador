@@ -5,21 +5,22 @@
 #include "Player.h"
 #include "Collider.h"
 
+// There can't be two skies.
 class World
 {
-	int64_t last_id = 0;
+	static inline int64_t last_id = 0;
 public:
 	Renderables<Invader> invaders;
 	Renderables<Projectile> bullets;
 	Player player;
 
-	Boundary bounds{ Position{20, 20}, { Position{600, 400} } };
+	Boundary bounds{ Position{20, 20}, { Position{600, 500} } };
 	Collider collider = { bounds };
 public:
 	World(Player&& player) : player(player) {}
 	void Advance(float delta);
 	void Render();
-	int64_t GetNextId()
+	static int64_t GetNextId()
 	{
 		assert(last_id >= 0); // Overflow?
 		return ++last_id;

@@ -2,7 +2,8 @@
 #include "Game.h"
 #include "PhatLeetLib.h"
 
-Game::Game() :
+Game::Game(Sprites& sprites) :
+	sprites(sprites),
 	world (Player { sprites.Player, {400.f, 550.f}, {50.f} })
 {
 	for (int n = 0; n < 50; ++n)
@@ -61,6 +62,6 @@ void Game::GameLoop()
 
 Game& GetGame()
 {
-	static Game game;
+	static Game game (GetSprites()); // Attempt for re-entrancy will deadlock here. We want that. No initialization of world must refer to game.
 	return game;
 }

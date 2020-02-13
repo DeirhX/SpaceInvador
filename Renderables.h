@@ -2,6 +2,7 @@
 #include "Sprites.h"
 #include "Vector.h"
 #include "Entity.h"
+#include "PhatLeetLib.h"
 
 class Renderable : public Entity
 {
@@ -52,8 +53,20 @@ public:
 	[[nodiscard]] Boundary GetBoundary() const { return { Boundary{ GetProjection(), GetSize() } }; }
 
 	void Advance(float delta) override;
+	virtual void Render() { DrawSprite(*this); }
 	virtual void Collide(Renderable& other) {}
 };
+
+class Decoration : public Renderable
+{
+public:
+	Decoration(const Sprite& sprite, const Position& base, const Size& size)
+		: Renderable(sprite, base, size)
+	{
+	}
+	[[nodiscard]] virtual EntityType GetType() { return EntityType::Decoration; }
+};
+
 
 // Effective container for storing an array of renderables - deleting does not shift, dead objects can be reused later.
 // Iterator and foreach support - skips over dead elements 

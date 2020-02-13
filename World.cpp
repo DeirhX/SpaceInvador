@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "World.h"
-#include "PhatLeetLib.h"
+#include "Game.h"
 
 void World::Advance(float delta)
 {
@@ -17,7 +17,7 @@ void World::Render()
 {
 	ForAllRenderables([](Renderable& r)
 	{
-		DrawSprite(r);
+		r.Render();
 	});
 }
 

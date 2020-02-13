@@ -3,7 +3,7 @@
 #include "Entity.h"
 
 Entity::Entity()
-: id(0)
+: id(World::GetNextId())
 {
 }
 
