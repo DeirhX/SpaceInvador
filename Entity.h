@@ -19,7 +19,7 @@ public:
 public:
 	Entity();
 	virtual ~Entity() = default;
-	void Destroy() { is_destroyed = true; }
+	virtual void Destroy() { is_destroyed = true; }
 	float& Life() { return life; }
 	float& LifeDrain() { return life_drain; }
 	[[nodiscard]] bool IsAlive() const { return !is_destroyed; }

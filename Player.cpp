@@ -15,12 +15,12 @@ void Player::Advance(float delta)
 	crosshair.Location() = { mx, my };
 	HandleShoot(delta);
 
-	Renderable::Advance(delta);
+	base::Advance(delta);
 }
 
 void Player::Render()
 {
-	Renderable::Render();
+	base::Render();
 	crosshair.Render();
 }
 

@@ -2,7 +2,8 @@
 #include "Renderables.h"
 
 class Player : public Renderable
-{
+{	using base = Renderable;
+	
 	static inline float ShootEnergyMax = 100.0f;
 	static inline float ShotCost = 25.0f;
 

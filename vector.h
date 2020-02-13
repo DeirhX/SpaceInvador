@@ -16,12 +16,15 @@ struct Vector2
 	Vector2& operator-= (const Vector2& other) { x -= other.x; y -= other.y; return *this; };
 
 	float GetLength() const { return std::sqrt(x * x + y * y); }
-	void Normalize()
+	Vector2& Normalize()
 	{
-		if (!x && !y) return;
-		float length = GetLength();
-		x /= length;
-		y /= length;
+		if (x || y) 
+		{
+			float length = GetLength();
+			x /= length;
+			y /= length;
+		}
+		return *this;
 	}
 };
 inline Vector2 operator* (float scalar, Vector2 vector) { return { scalar * vector.x, scalar * vector.y}; }

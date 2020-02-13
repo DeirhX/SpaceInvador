@@ -10,8 +10,10 @@ class World
 {
 	static inline int64_t last_id = 0;
 public:
+	// Later move to owning pointers
 	Renderables<Invader> invaders;
 	Renderables<Projectile> bullets;
+	Renderables<Decoration> decals;
 	Player player;
 
 	Boundary bounds{ Position{20, 20}, { Position{600, 500} } };
@@ -31,6 +33,7 @@ private:
 		unary_function(player);
 		for (auto& bullet : bullets) unary_function(bullet);
 		for (auto& invader : invaders) unary_function(invader);
+		for (auto& decal: decals) unary_function(decal);
 	}
 };
 

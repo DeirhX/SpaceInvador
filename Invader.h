@@ -2,7 +2,8 @@
 #include "Renderables.h"
 
 class Invader : public Renderable
-{
+{	using base = Renderable;
+	
 private:
 	int seed = 0;
 	float time_elapsed = 0;
@@ -15,5 +16,6 @@ public:
 	
 	void Advance(float delta) override;
 	void Collide(Renderable& other) override;
+	void Destroy() override;
 };
 

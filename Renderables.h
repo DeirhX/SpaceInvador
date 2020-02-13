@@ -62,7 +62,17 @@ class Decoration : public Renderable
 public:
 	Decoration(const Sprite& sprite, const Position& base, const Size& size)
 		: Renderable(sprite, base, size)
+	{	}
+	Decoration(const Sprite& sprite, const Position& base, const Size& size, const Vector2& speed)
+		: Renderable(sprite, base, size)
 	{
+		Speed() = speed;
+	}
+	Decoration(const Sprite& sprite, const Position& base, const Size& size, const Vector2& speed, float life)
+		: Renderable(sprite, base, size)
+	{
+		Speed() = speed;
+		Life() = life;
 	}
 	[[nodiscard]] virtual EntityType GetType() { return EntityType::Decoration; }
 };

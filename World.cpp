@@ -8,7 +8,8 @@ void World::Advance(float delta)
 	ForAllRenderables([=](Renderable& r)
 	{
 		r.Advance(delta);
-		collider.Populate(r);
+		if (r.IsAlive())
+			collider.Populate(r);
 	});
 	collider.Solve();
 }
