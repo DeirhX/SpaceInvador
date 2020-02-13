@@ -12,7 +12,9 @@ public:
 	Player(const Sprite& sprite, const Position& base, const Size& size)
 		: Renderable(sprite, base, size)
 	{ }
-
+	EntityType GetType() override { return EntityType::Player; }
+	
 	void Advance(float delta) override;
 };
+
 

@@ -2,6 +2,13 @@
 #include "Sprites.h"
 #include "Vector.h"
 
+enum class EntityType
+{
+	Player,
+	PlayerProjectile,
+	Invader,
+};
+
 class Entity
 {
 	bool is_destroyed = false; // Re-use dead objects so we don't need expensive allocations and vector shifts
@@ -21,6 +28,7 @@ public:
 		if (life <= 0)
 			Destroy();
 	}
+	[[nodiscard]] virtual EntityType GetType() = 0;
 };
 
 class Renderable : public Entity
@@ -42,7 +50,8 @@ protected:
 public:
 	Renderable(Sprite sprite, Position base, Size size = { 10.f }) : sprite(sprite), location(base), size(size) {}
 	Renderable& operator= (const Renderable& other) = default; // automatic
-	// void SetTransform(Position newOffset) { transform = newOffset; pos_dirty = true; }
+
+	// Setters
 	void SetSize(float newSize) { size = { newSize, newSize }; }
 	void SetSize(Size newSize) { size = newSize; }
 	Position& Location() { pos_dirty = true; return location; };
@@ -50,6 +59,8 @@ public:
 	Vector2& Speed() { return speed; }
 	float& Rotation() { return rotation; }
 	DWORD& Tint() { return tint; }
+
+	// Getters
 	[[nodiscard]] Sprite GetSprite() const { return sprite; }
 	[[nodiscard]] Size GetSize() const { return size; }
 	[[nodiscard]] Vector2 GetSpeed() const { return speed; }
@@ -66,6 +77,7 @@ public:
 	}
 	[[nodiscard]] float GetRotation() const { return rotation; }
 	[[nodiscard]] DWORD GetTint() const { return tint; }
+	[[nodiscard]] Boundary GetBoundary() const { return { Boundary{ GetProjection(), GetSize() } }; }
 
 	void Advance(float delta) override;
 };
@@ -117,5 +129,3 @@ public:
 	}
 	iterator end() { return iterator(vector, vector.end()); }
 };
-
-using Bullet = Renderable;

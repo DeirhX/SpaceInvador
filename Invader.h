@@ -11,7 +11,8 @@ public:
 	{
 		SetSize((float)(10 + ((seed) % 17)));
 	}
-
+	EntityType GetType() override { return EntityType::Player; }
+	
 	void Advance(float delta) override;
 };
 

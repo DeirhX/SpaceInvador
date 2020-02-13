@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include <cassert>
 
 namespace math
 {
@@ -36,15 +37,36 @@ struct Size
 	Size(float x, float y) : x(x), y(y) {}
 };
 
+// Rectangular boundary for simplicity
 struct Boundary
 {
 	Position min;
 	Position max;
+	Size size;
 
+	Boundary(Position min, Position max) : min(min), max(max)
+	{
+		assert(min.x <= max.x);
+		assert(min.y <= max.y);
+	}
+	Boundary(Position centre, Size size)
+	{
+		assert(size.x >= 0);
+		assert(size.y >= 0);
+		min = { centre.x - size.x / 2, centre.y - size.y / 2 };
+		max = { centre.x + size.x / 2, centre.y + size.y / 2 };
+	}
+
+	[[nodiscard]] Size GetSize() { return { max.x - min.x, max.y - min.y }; }
+	
 	[[nodiscard]] bool IsInside(Position pos) const
 	{
 		return pos.x >= min.x && pos.x <= max.x
 			&& pos.y >= min.y && pos.y <= max.y;
+	}
+	[[nodiscard]] bool Overlaps(Boundary other) const
+	{
+		return !(max.x < other.min.x || min.x < other.max.x || max.y < other.min.y || min.y < other.max.y);
 	}
 
 	void MakeInside(Position& pos) const

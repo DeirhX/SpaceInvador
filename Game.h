@@ -1,8 +1,5 @@
 #pragma once
 #include "Sprites.h"
-#include "vector.h"
-#include "Renderables.h"
-#include "Invader.h"
 #include "World.h"
 
 
