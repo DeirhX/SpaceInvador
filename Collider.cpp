@@ -2,10 +2,11 @@
 #include "Collider.h"
 #include "Renderables.h"
 
+
 std::pair<int, int> Collider::GetSectorIndices(Position pos)
 {
-	int x = std::clamp((int)((pos.x - bounds.min.x) / divisions), 0, divisions - 1);
-	int y = std::clamp((int)((pos.y - bounds.min.y) / divisions), 0, divisions - 1);
+	int x = std::clamp((int)((pos.x - bounds.min.x) / bounds.GetSize().x * divisions), 0, divisions - 1);
+	int y = std::clamp((int)((pos.y - bounds.min.y) / bounds.GetSize().y * divisions), 0, divisions - 1);
 	return { x, y };
 }
 
@@ -46,16 +47,26 @@ void Collider::Populate(Renderable& renderable)
 
 void Collider::Solve()
 {
+	// Use to filter out same collisions happening in multiple sectors. Pointer equality should suffice.
+	auto collisions = std::set<std::pair<Renderable*, Renderable*>>() ;
+		
 	for (auto& sector : sectors)
 	{
 		// O(n*n) for objects inside. High enough `divisions` should limit them to minimum.
-		for(int i = 0; i < sector.objects.size(); ++i)
-			for (int j = i + 1; j < sector.objects.size(); ++j)
+		for(size_t i = 0; i < sector.objects.size(); ++i)
+			for (size_t j = i + 1; j < sector.objects.size(); ++j)
 			{
 				if (sector.objects[i]->GetBoundary().Overlaps(sector.objects[j]->GetBoundary()))
 				{
 					/* Houston, we have a collision! */
+					collisions.insert({ sector.objects[i], sector.objects[j] });
 				}
 			}
+	}
+
+	for (auto pair : collisions)
+	{
+		pair.first->Collide(*pair.second);
+		pair.second->Collide(*pair.first);
 	}
 }

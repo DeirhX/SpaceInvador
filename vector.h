@@ -66,7 +66,12 @@ struct Boundary
 	}
 	[[nodiscard]] bool Overlaps(Boundary other) const
 	{
-		return !(max.x < other.min.x || min.x < other.max.x || max.y < other.min.y || min.y < other.max.y);
+		// return !(max.x < other.min.x || min.x < other.max.x || max.y < other.min.y || min.y < other.max.y);
+		if (max.x < other.min.x || min.x > other.max.x || max.y < other.min.y || min.y > other.max.y)
+			return false;
+		else {
+			return true;
+		}
 	}
 
 	void MakeInside(Position& pos) const

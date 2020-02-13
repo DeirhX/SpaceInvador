@@ -14,3 +14,12 @@ void Invader::Advance(float delta)
 
 	Renderable::Advance(delta);
 }
+
+void Invader::Collide(Renderable& other)
+{
+	if (other.GetType() == EntityType::PlayerProjectile )
+	{
+		Life() -= 100.f;
+		Destroy();
+	}
+}

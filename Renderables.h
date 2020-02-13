@@ -1,35 +1,7 @@
 #pragma once
 #include "Sprites.h"
 #include "Vector.h"
-
-enum class EntityType
-{
-	Player,
-	PlayerProjectile,
-	Invader,
-};
-
-class Entity
-{
-	bool is_destroyed = false; // Re-use dead objects so we don't need expensive allocations and vector shifts
-	float life = 100.0f;
-	float life_drain = 0;
-public:
-	virtual ~Entity() = default;
-	void Destroy() { is_destroyed = true; }
-	[[nodiscard]] bool IsAlive() const { return !is_destroyed; }
-	[[nodiscard]] bool IsDead() const { return is_destroyed; }
-	float& Life() { return life; }
-	float& LifeDrain() { return life_drain; }
-	
-	virtual void Advance(float delta)
-	{
-		life -= life_drain * delta;
-		if (life <= 0)
-			Destroy();
-	}
-	[[nodiscard]] virtual EntityType GetType() = 0;
-};
+#include "Entity.h"
 
 class Renderable : public Entity
 {
@@ -80,6 +52,7 @@ public:
 	[[nodiscard]] Boundary GetBoundary() const { return { Boundary{ GetProjection(), GetSize() } }; }
 
 	void Advance(float delta) override;
+	virtual void Collide(Renderable& other) {}
 };
 
 // Effective container for storing an array of renderables - deleting does not shift, dead objects can be reused later.

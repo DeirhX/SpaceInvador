@@ -14,5 +14,6 @@ public:
 	EntityType GetType() override { return EntityType::Player; }
 	
 	void Advance(float delta) override;
+	void Collide(Renderable& other) override;
 };
 

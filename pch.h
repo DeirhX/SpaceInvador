@@ -5,5 +5,6 @@
 #include <vector>
 #include <memory>
 #include <cmath>
+#include <set>
 
 #include "lib/leetlib.h"

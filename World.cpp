@@ -4,16 +4,21 @@
 
 void World::Advance(float delta)
 {
-	player.Advance(delta);
-	for (auto& bullet : bullets) bullet.Advance(delta);
-	for (auto& invader : invaders) invader.Advance(delta);
+	collider.Clear();
+	ForAllRenderables([=](Renderable& r)
+	{
+		r.Advance(delta);
+		collider.Populate(r);
+	});
+	collider.Solve();
 }
 
 void World::Render()
 {
-	DrawSprite(player);
-	for (auto& bullet : bullets) DrawSprite(bullet);
-	for (auto& invader : invaders) DrawSprite(invader);
+	ForAllRenderables([](Renderable& r)
+	{
+		DrawSprite(r);
+	});
 }
 
 World& GetWorld()
