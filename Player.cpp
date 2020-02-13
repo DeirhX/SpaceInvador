@@ -3,6 +3,7 @@
 #include "World.h"
 #include "Game.h"
 #include <algorithm>
+#include "Math.h"
 
 void Player::Advance(float delta)
 {
@@ -35,10 +36,13 @@ void Player::HandleShoot(float delta)
 		shoot_energy -= ShotCost;
 		reloaded = false;
 
+		Vector2 dir = { crosshair.GetProjection() - GetProjection() };
+		dir.Normalize();
+
 		auto& bullet = GetWorld().bullets.Add({ GetGame().sprites.Bullet, GetWorld().player.GetProjection(), {10} });
-		bullet.Speed() = { 0, -2.5f };
+		bullet.Speed() = 2.5f * dir;
 		bullet.LifeDrain() = 0.5f;
-		bullet.Rotation() = math::half_pi;
+		bullet.Rotation() = math::ToRadians(dir);
 	}
 
 }

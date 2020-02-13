@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Invader.h"
+#include "Math.h"
 
 void Invader::Advance(float delta)
 {

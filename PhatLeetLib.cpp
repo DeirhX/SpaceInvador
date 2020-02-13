@@ -10,5 +10,5 @@ void DrawSprite(Sprite sprite, Position centre, Size size, float rotate_angle_ra
 
 void DrawSprite(const Renderable& renderable)
 {
-	DrawSprite(renderable.GetSprite(), renderable.GetProjection(), renderable.GetSize(), renderable.GetRotation(), renderable.GetTint());
+	DrawSprite(renderable.GetSprite(), renderable.GetProjection(), renderable.GetSize(), -renderable.GetRotation(), renderable.GetTint());
 }

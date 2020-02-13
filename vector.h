@@ -2,13 +2,6 @@
 #include <algorithm>
 #include <cassert>
 
-namespace math
-{
-	const float pi = 3.141592f;
-	const float two_pi = 2.0f * pi;
-	const float half_pi = 0.5f * pi;
-}
-
 struct Vector2
 {
 	float x = 0;
@@ -21,7 +14,17 @@ struct Vector2
 	Vector2 operator* (float by) const { return { x * by, y * by }; }
 	Vector2& operator+= (const Vector2& other) { x += other.x; y += other.y; return *this; };
 	Vector2& operator-= (const Vector2& other) { x -= other.x; y -= other.y; return *this; };
+
+	float GetLength() const { return std::sqrt(x * x + y * y); }
+	void Normalize()
+	{
+		if (!x && !y) return;
+		float length = GetLength();
+		x /= length;
+		y /= length;
+	}
 };
+inline Vector2 operator* (float scalar, Vector2 vector) { return { scalar * vector.x, scalar * vector.y}; }
 
 /* Make it more clear */
 using Position = Vector2;
