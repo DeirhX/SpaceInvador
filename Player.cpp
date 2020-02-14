@@ -7,16 +7,16 @@
 
 void Player::Advance(float delta)
 {
-	auto movement_offset = Position{ IsKeyDown('A') ? -7.0f : IsKeyDown('D') ? 7.0f : 0, 0 };
-	Location() += movement_offset;
+	Speed() = Position{ IsKeyDown('A') ? -7.0f : IsKeyDown('D') ? 7.0f : 0, 0 };
+
+	base::Advance(delta);
+
 	GetWorld().bounds.MakeInside(Location());
 
 	float mx, my;
 	GetMousePos(mx, my);
 	crosshair.Location() = { mx, my };
 	HandleShoot(delta);
-
-	base::Advance(delta);
 }
 
 void Player::Render()
@@ -41,7 +41,7 @@ void Player::HandleShoot(float delta)
 		dir.Normalize();
 
 		auto& bullet = GetWorld().bullets.Add({ GetGame().sprites.Bullet, GetWorld().player.GetProjection() + Size{0, -15.f}, {10} });
-		bullet.Speed() = 2.5f * dir;
+		bullet.Speed() = 4.5f * dir;
 		bullet.LifeDrain() = 0.5f;
 		bullet.Rotation() = math::ToRadians(dir);
 	}

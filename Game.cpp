@@ -23,14 +23,17 @@ bool Game::WantQuit()
 
 void Game::GameLoop()
 {
+	PerformanceTimer timer;
+	
 	while (!WantQuit())
 	{
-		++time;
-
-		world.Advance(1.0f);
+		auto elapsed = timer.ElapsedSinceLast() * AdvancePerSecond;
+		time += elapsed;
+		
+		world.Advance(elapsed);
 		world.Render();
 
-		sceneGameplay.Advance(1.0f);
+		sceneGameplay.Advance(elapsed);
 		sceneGameplay.Render();
 
 		Flip();
@@ -41,4 +44,24 @@ Game& GetGame()
 {
 	static Game game (GetSprites()); // Attempt for re-entrancy will deadlock here. A good thing. No initialization of world must refer to game.
 	return game;
+}
+
+// PerformanceTimer 
+PerformanceTimer::PerformanceTimer()
+{
+	QueryPerformanceFrequency(&frequency);
+	QueryPerformanceCounter(&last);
+}
+
+float PerformanceTimer::ElapsedSinceLast()
+{
+	LARGE_INTEGER now;
+	QueryPerformanceCounter(&now);
+	LARGE_INTEGER diff;
+	diff.QuadPart = now.QuadPart - last.QuadPart;
+	diff.QuadPart *= 1000000; // Prevent loss of precision
+	diff.QuadPart /= frequency.QuadPart;
+
+	last = now;
+	return (float)diff.QuadPart / 1000000;
 }

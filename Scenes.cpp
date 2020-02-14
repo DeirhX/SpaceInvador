@@ -18,6 +18,6 @@ void Scene::RenderText(std::string_view text, Position centre, Size size)
 
 void GameplayScene::Render()
 {
-	static const char title[] = "space invaders";
-	RenderText(title, { 150, 30 }, Size { 20.f, 20.f });
+	static const char title[] = "score";
+	RenderText(title, { 200, 30 }, Size { 20.f, 20.f });
 }

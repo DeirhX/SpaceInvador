@@ -5,10 +5,11 @@
 
 class Game
 {
+	static constexpr float AdvancePerSecond = 50.f;
 public:
 	Sprites& sprites;
 	World world;
-	int time = 0;
+	float time = 0;
 
 	GameplayScene sceneGameplay;
 public:
@@ -21,3 +22,13 @@ public:
 
 Game& GetGame();
 
+
+// TODO: separate file
+class PerformanceTimer
+{
+	LARGE_INTEGER frequency = {}; // Redundant but I'm sure compiler optimizes it away
+	LARGE_INTEGER last = {};
+public:
+	PerformanceTimer();
+	float ElapsedSinceLast();
+};

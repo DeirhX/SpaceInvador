@@ -4,6 +4,9 @@
     <Filter Include="library">
       <UniqueIdentifier>{6a0dccdd-6e42-4419-8536-09e8f4804ebf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{e44b0e99-d017-4e4b-9658-591bd4b8ff0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\leetlib.cpp">
@@ -13,17 +16,27 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Sprites.cpp" />
-    <ClCompile Include="Renderables.cpp" />
-    <ClCompile Include="Invader.cpp" />
     <ClCompile Include="World.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Collider.cpp" />
-    <ClCompile Include="Projectile.cpp" />
-    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="PhatLeetLib.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Sounds.cpp" />
     <ClCompile Include="Scenes.cpp" />
+    <ClCompile Include="Entity.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Invader.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderables.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\leetlib.h">
@@ -32,17 +45,27 @@
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Renderables.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="PhatLeetLib.h" />
-    <ClInclude Include="Invader.h" />
     <ClInclude Include="World.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Collider.h" />
-    <ClInclude Include="Projectile.h" />
-    <ClInclude Include="Entity.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Sounds.h" />
     <ClInclude Include="Scenes.h" />
+    <ClInclude Include="Entity.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Invader.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderables.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
