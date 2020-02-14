@@ -43,6 +43,8 @@ struct Size
 	Size(float x, float y) : x(x), y(y) {}
 };
 inline Vector2 operator* (float scalar, Size size) { return { scalar * size.x, scalar * size.y }; }
+inline Vector2 operator+ (Vector2 vector, Size size) { return { vector.x + size.x, vector.y + size.y }; }
+inline Vector2 operator- (Vector2 vector, Size size) { return { vector.x - size.x, vector.y - size.y }; }
 
 // Rectangular boundary for simplicity
 struct Boundary

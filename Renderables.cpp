@@ -5,7 +5,7 @@
 void Renderable::Advance(float delta) 
 {
 	Location() += speed * delta;
-	GetWorld().bounds.MakeInside(Location());
+	//GetWorld().bounds.MakeInside(Location());
 
 	base::Advance(delta);
 }

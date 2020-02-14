@@ -4,14 +4,15 @@
 #include "Collider.h"
 #include "Vector.h"
 
-using FloatLimits = std::numeric_limits<float>;
+const float LimitMin = -10000.0f;
+const float LimitMax = +10000.0f;
 
 World::World(Player&& player) 
 	: colliders { 
-		Collider { Boundary { Position { FloatLimits::lowest(), FloatLimits::lowest() }, Position { FloatLimits::max(), bounds.min.y } } },
-		Collider { Boundary { Position { FloatLimits::lowest(), bounds.max.y }, Position { FloatLimits::max(), FloatLimits::max() } } },
-		Collider { Boundary { Position { FloatLimits::lowest(), FloatLimits::lowest() }, Position { bounds.min.x, FloatLimits::max() } } },
-		Collider { Boundary { Position { bounds.max.x, FloatLimits::lowest() }, Position { FloatLimits::max(), FloatLimits::max() } } }
+		Collider { Boundary { Position { LimitMin, LimitMin },	   Position { LimitMax, bounds.min.y } } },
+		Collider { Boundary { Position { LimitMin, bounds.max.y }, Position { LimitMax, LimitMax } } },
+		Collider { Boundary { Position { LimitMin, LimitMin },     Position { bounds.min.x, LimitMax } } },
+		Collider { Boundary { Position { bounds.max.x, LimitMin }, Position { LimitMax, LimitMax } } }
 	}, player(player)
 {
 	

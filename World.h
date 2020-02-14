@@ -12,6 +12,8 @@ class World
 {
 	static inline int64_t last_id = 0;
 public:
+	Boundary bounds{ Position{20, 20}, { Position{600, 500} } };
+
 	// Later move to owning pointers
 	Renderables<Invader> invaders;
 	Renderables<Projectile> bullets;
@@ -19,7 +21,6 @@ public:
 	std::array<Collider, 4> colliders;
 	Player player;
 
-	Boundary bounds{ Position{20, 20}, { Position{600, 500} } };
 	CollissionSolver collissionSolver = { bounds };
 public:
 	World(Player&& player);
