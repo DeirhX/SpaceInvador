@@ -23,7 +23,7 @@ public:
 	float& Life() { return life; }
 	float& LifeDrain() { return life_drain; }
 	[[nodiscard]] bool IsAlive() const { return !is_destroyed; }
-	[[nodiscard]] bool IsDead() const { return is_destroyed; }
+	[[nodiscard]] bool IsDestroyed() const { return is_destroyed; }
 	[[nodiscard]] virtual EntityType GetType() = 0;
 
 	virtual void Advance(float delta)
