@@ -9,13 +9,16 @@ class Game
 public:
 	Sprites& sprites;
 	World world;
+protected:
 	float time = 0;
-
+	int score = 0;
 	GameplayScene sceneGameplay;
 public:
 	Game(Sprites& sprites);
+
+	int& Score() { return score; }
+	float& Time() { return time; }
 	
-	//void RenderTitle(int time);
 	bool WantQuit();
 	void GameLoop();
 };

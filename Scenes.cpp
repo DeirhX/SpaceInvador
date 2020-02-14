@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Scenes.h"
 #include "Sprites.h"
+#include "Game.h"
 
 void Scene::RenderText(std::string_view text, Position centre, Size size)
 {
@@ -18,6 +19,7 @@ void Scene::RenderText(std::string_view text, Position centre, Size size)
 
 void GameplayScene::Render()
 {
-	static const char title[] = "score";
-	RenderText(title, { 200, 30 }, Size { 20.f, 20.f });
+	static const char title[] = "score: ";
+	std::string score_text = title + std::to_string(GetGame().Score());
+	RenderText(score_text, { 200, 30 }, Size { 20.f, 20.f });
 }

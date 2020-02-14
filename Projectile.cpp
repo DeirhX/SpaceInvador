@@ -15,6 +15,7 @@ void Projectile::Collide(const Entity& other)
 			proj.Speed() = GetSpeed().GetLength() * math::FromRadians(Rotation() + angle);
 			//proj.Life() = std::min(proj.GetLife(),50.0f);
 			proj.Rotation() = math::ToRadians(proj.GetSpeed());
+			++proj.generation;
 			GetWorld().bullets.Add(proj);
 		};
 		// Split into two more bullets
