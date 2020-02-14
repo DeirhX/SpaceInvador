@@ -23,6 +23,7 @@
     <ClCompile Include="PhatLeetLib.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Sounds.cpp" />
+    <ClCompile Include="Scenes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\leetlib.h">
@@ -42,5 +43,6 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Sounds.h" />
+    <ClInclude Include="Scenes.h" />
   </ItemGroup>
 </Project>

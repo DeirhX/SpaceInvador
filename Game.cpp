@@ -14,29 +14,12 @@ Game::Game(Sprites& sprites) :
 	}
 }
 
-void Game::RenderTitle(int time)
-{
-	static const char title[] = "space invaders";
-	for (unsigned int n = 0; n < strlen(title); ++n)
-	{
-		auto glyph = sprites.Glyphs[title[n]];
-		if (glyph)	// Avoid unsupported characters
-		{
-			DrawSprite(glyph, (float)(n * 40 + 150), 30,
-				20, 20,
-				(float)(sin(time * 0.1) * n * 0.01));
-		}
-	}
-}
-
-
 bool Game::WantQuit()
 {
 	return 
 		::WantQuit()
 		|| IsKeyDown(VK_ESCAPE);
 }
-
 
 void Game::GameLoop()
 {
@@ -47,7 +30,8 @@ void Game::GameLoop()
 		world.Advance(1.0f);
 		world.Render();
 
-		RenderTitle(time);
+		sceneGameplay.Advance(1.0f);
+		sceneGameplay.Render();
 
 		Flip();
 	}
