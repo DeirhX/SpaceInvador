@@ -2,6 +2,7 @@
 #include "Invader.h"
 #include "Math.h"
 #include "World.h"
+#include "Sounds.h"
 
 [[nodiscard]]
 Position Invader::GetProjection() const
@@ -39,14 +40,16 @@ void Invader::Collide(const Entity& other)
 
 void Invader::Destroy()
 {
-	auto such = Vector2{ -1, -1 }.Normalize();
+	SoundEffect::Play("pow", GetProjection());
+	
+	/*auto such = Vector2{ -1, -1 }.Normalize();
 	auto nice  = Vector2{ 0, -1 }.Normalize();
 	auto directions = Vector2{ +1, -1 }.Normalize();
 	const float life = 25.f;
 
 	GetWorld().decals.Add(Decoration{ GetSprites().Glyphs['p'], GetProjection() + Vector2{-5.f, 0}, {10.f} , such, life });
 	GetWorld().decals.Add(Decoration{ GetSprites().Glyphs['o'], GetProjection() + Vector2{0, 0}, {10.f} , nice, life });
-	GetWorld().decals.Add(Decoration{ GetSprites().Glyphs['w'], GetProjection() + Vector2{5.f, 0}, {10.f} , directions, life });
+	GetWorld().decals.Add(Decoration{ GetSprites().Glyphs['w'], GetProjection() + Vector2{5.f, 0}, {10.f} , directions, life });*/
 	
 	base::Destroy();
 }

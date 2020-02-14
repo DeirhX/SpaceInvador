@@ -11,7 +11,7 @@ public:
 		Life() = MaxHealth;
 	}
 
-	EntityType GetType() const override { return EntityType::PlayerProjectile; }
+	[[nodiscard]] EntityType GetType() const override { return EntityType::PlayerProjectile; }
 	void Collide(const Entity& other) override;
 };
 
