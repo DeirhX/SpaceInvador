@@ -30,26 +30,19 @@ void Game::RenderTitle(int time)
 }
 
 
-void Game::ProcessInput()
+bool Game::WantQuit()
 {
-	if (WantQuit()) return;
-	if (IsKeyDown(VK_ESCAPE)) return;
-
-	// Player movement
-	
-	// FIRE
-	
+	return 
+		::WantQuit()
+		|| IsKeyDown(VK_ESCAPE);
 }
 
 
 void Game::GameLoop()
 {
-	while (true)
+	while (!WantQuit())
 	{
 		++time;
-
-		// Process Input
-		ProcessInput();
 
 		world.Advance(1.0f);
 		world.Render();
@@ -62,6 +55,6 @@ void Game::GameLoop()
 
 Game& GetGame()
 {
-	static Game game (GetSprites()); // Attempt for re-entrancy will deadlock here. We want that. No initialization of world must refer to game.
+	static Game game (GetSprites()); // Attempt for re-entrancy will deadlock here. A good thing. No initialization of world must refer to game.
 	return game;
 }

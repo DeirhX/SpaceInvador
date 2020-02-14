@@ -12,10 +12,10 @@ public:
 	{
 		SetSize((float)(10 + ((seed) % 17)));
 	}
-	EntityType GetType() override { return EntityType::Player; }
+	EntityType GetType() const override { return EntityType::Invader; }
 	
 	void Advance(float delta) override;
-	void Collide(Renderable& other) override;
+	void Collide(const Renderable& other) override;
 	void Destroy() override;
 };
 

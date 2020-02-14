@@ -54,7 +54,7 @@ public:
 
 	void Advance(float delta) override;
 	virtual void Render() { DrawSprite(*this); }
-	virtual void Collide(Renderable& other) {}
+	virtual void Collide(const Renderable& other) {}
 };
 
 class Decoration : public Renderable
@@ -77,7 +77,7 @@ public:
 		LifeDrain() = 1.f;
 		FadeBegin() = life;
 	}
-	[[nodiscard]] virtual EntityType GetType() { return EntityType::Decoration; }
+	[[nodiscard]] virtual EntityType GetType() const { return EntityType::Decoration; }
 	void Advance(float delta) override 
 	{
 		base::Advance(delta);

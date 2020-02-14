@@ -12,7 +12,7 @@ public:
 	Game(Sprites& sprites);
 	
 	void RenderTitle(int time);
-	void ProcessInput();
+	bool WantQuit();
 	void GameLoop();
 };
 

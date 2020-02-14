@@ -17,7 +17,7 @@ void Invader::Advance(float delta)
 	base::Advance(delta);
 }
 
-void Invader::Collide(Renderable& other)
+void Invader::Collide(const Renderable& other)
 {
 	if (other.GetType() == EntityType::PlayerProjectile )
 	{
