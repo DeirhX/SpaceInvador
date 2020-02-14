@@ -2,7 +2,13 @@
 #include "Math.h"
 #include "Vector.h"
 
-float math::ToRadians(Vector2 unit_vector)
+float math::ToRadians(Vector2 vector)
 {
-	return std::atan2(unit_vector.y, unit_vector.x);
+	//assert(unit_vector.GetLength() == 1.0f);
+	return std::atan2(vector.y, vector.x);
+}
+
+Vector2 math::FromRadians(float radians)
+{
+	return { std::cos(radians), std::sin(radians) };
 }

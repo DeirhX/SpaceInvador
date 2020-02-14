@@ -28,6 +28,8 @@ public:
 	virtual void Destroy() { is_destroyed = true; }
 	float& Life() { return life; }
 	float& LifeDrain() { return life_drain; }
+	[[nodiscard]] float GetLife() const { return life; }
+	[[nodiscard]] float GetLifeDrain() const { return life_drain; }
 	[[nodiscard]] bool IsAlive() const { return !is_destroyed; }
 	[[nodiscard]] bool IsDestroyed() const { return is_destroyed; }
 

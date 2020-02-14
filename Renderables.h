@@ -92,24 +92,25 @@ class Renderables
 public:
 	auto Size() { return vector.size(); };
 	TRenderable& operator[](int index) { return vector[index]; } // TODO: Make a custom iterator that skips dead items
-	TRenderable& Add(TRenderable&& item)
+	
+	TRenderable& Add(TRenderable item)
 	{
 		auto& dead_item = std::find_if(vector.begin(), vector.end(), [this](auto it) { return it.IsDestroyed(); });
 		if (dead_item != vector.end()) {
-			*dead_item = TRenderable(item);
+			*dead_item = item;
 			return *dead_item;
 		}
-		return vector.emplace_back(std::forward<TRenderable&&>(item));
+		return vector.emplace_back(item);
 	}
-	void Remove(TRenderable&& item) 
+	void Remove(TRenderable& item) 
 	{	// O(n) search is not really needed here. Just flag it destroyed and it will be recycled later, maybe.
 		item.Destroy();
 	}
 	void Shrink()
 	{	// Slice out dead objects on the beginning and end of deque. Don't invalidate references.
-		while (!vector.empty() && *vector.front().IsDestroyed())
+		while (!vector.empty() && vector.front().IsDestroyed())
 			vector.pop_front();
-		while (!vector.empty() && *vector.back().IsDestroyed())
+		while (!vector.empty() && vector.back().IsDestroyed())
 			vector.pop_back();
 	}
 

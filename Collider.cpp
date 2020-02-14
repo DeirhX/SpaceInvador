@@ -88,9 +88,9 @@ CollisionDir CollissionSolver::Direction(Boundary from, Boundary to)
 	float hx = height * dx;
 
 	if (wy > hx) {
-		return (wy > -hx) ? CollisionDir::Top : CollisionDir::Left;
+		return (wy > -hx) ? CollisionDir::Top : CollisionDir::Right;
 	} else {
-		return (wy > -hx) ? CollisionDir::Right : CollisionDir::Bottom;
+		return (wy > -hx) ? CollisionDir::Left : CollisionDir::Bottom;
 	}
 
 }

@@ -28,6 +28,8 @@ void World::Advance(float delta)
 			collissionSolver.Populate(r);
 	});
 	collissionSolver.Solve();
+
+	TrimEntityContainers();
 }
 
 void World::Render()

@@ -595,10 +595,12 @@ HWND hWnd;
 //-----------------------------------------------------------------------------
 INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR cmd, INT )
 {
+	/*
 	int id = MessageBox(NULL,"fullscreen?","answer me!",MB_YESNOCANCEL);
 	if (id==IDCANCEL) return 0;
 	fullscreen=(id==IDYES);
-
+	*/
+	fullscreen = false;
     // Register the window class
     WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, MsgProc, 0L, 0L,
                       GetModuleHandle(NULL), NULL, NULL, NULL, NULL,

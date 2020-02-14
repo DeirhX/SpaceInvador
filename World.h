@@ -41,6 +41,13 @@ private:
 		for (auto& decal: decals) unary_function(decal);
 		for (auto& collider: colliders) unary_function(collider);
 	}
+
+	void TrimEntityContainers()
+	{
+		invaders.Shrink();
+		bullets.Shrink();
+		decals.Shrink();
+	}
 };
 
 World& GetWorld();

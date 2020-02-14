@@ -8,5 +8,6 @@ namespace math
 	const float two_pi = 2.0f * pi;
 	const float half_pi = 0.5f * pi;
 
-	float ToRadians(Vector2 unit_vector);
+	float ToRadians(Vector2 vector);
+	Vector2 FromRadians(float radians);
 }
