@@ -3,6 +3,17 @@
 #include "Math.h"
 #include "World.h"
 
+[[nodiscard]]
+Position Invader::GetProjection() const
+{
+	// Compute only if changed
+	if (pos_dirty)
+		projected_pos = location + transform; // Very much like WVP matrix multiplication!  We saved a lot of instructions here by caching it!
+
+	pos_dirty = false;
+	return projected_pos;
+}
+
 void Invader::Advance(float delta)
 {
 	time_elapsed += delta;
@@ -17,7 +28,7 @@ void Invader::Advance(float delta)
 	base::Advance(delta);
 }
 
-void Invader::Collide(const Renderable& other)
+void Invader::Collide(const Entity& other)
 {
 	if (other.GetType() == EntityType::PlayerProjectile )
 	{

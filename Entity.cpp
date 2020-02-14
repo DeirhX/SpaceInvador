@@ -2,8 +2,8 @@
 #include "World.h"
 #include "Entity.h"
 
-Entity::Entity()
-: id(World::GetNextId())
+Entity::Entity(Position base, Size size)
+: id(World::GetNextId()), location(base), size(size)
 {
 }
 

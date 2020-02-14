@@ -9,52 +9,27 @@ class Renderable : public Entity
 
 protected:
 	Sprite sprite;
-	Position location;			// True origin in world
-	Position transform = {};	// For temporary offsets
 	Vector2 speed = {};			// For auto movement
-	Size size = { 10.f, 10.f }; // Size of entity 
 	float rotation = 0;			// Rotation of rendered sprite
 	DWORD tint = 0xffffffff;	// Color mask
 
-	// Cache for multiple accesses per frame (I know it's not worth it for this simple game ;)
-	mutable bool pos_dirty = true;
-	mutable Position projected_pos = {};
-
 public:
-	Renderable(Sprite sprite, Position base, Size size = { 10.f }) : sprite(sprite), location(base), size(size) {}
+	Renderable(Sprite sprite, Position base, Size size) : base(base, size), sprite(sprite) {}
 	Renderable& operator= (const Renderable& other) = default; // automatic
 
 	// Setters
-	void SetSize(float newSize) { size = { newSize, newSize }; }
-	void SetSize(Size newSize) { size = newSize; }
-	Position& Location() { pos_dirty = true; return location; };
-	Position& Transform() { pos_dirty = true; return transform; }
 	Vector2& Speed() { return speed; }
 	float& Rotation() { return rotation; }
 	DWORD& Tint() { return tint; }
 
 	// Getters
 	[[nodiscard]] Sprite GetSprite() const { return sprite; }
-	[[nodiscard]] Size GetSize() const { return size; }
 	[[nodiscard]] Vector2 GetSpeed() const { return speed; }
-	[[nodiscard]] Position GetTransform() const { return transform; };
-	[[nodiscard]] Position GetLocation() const { return location; };
-	[[nodiscard]] Position GetProjection() const
-	{
-		// Compute only if changed
-		if (pos_dirty)
-			projected_pos = location + transform; // Very much like WVP matrix multiplication!  We saved a lot of instructions here by caching it!
-
-		pos_dirty = false;
-		return projected_pos;
-	}
 	[[nodiscard]] float GetRotation() const { return rotation; }
 	[[nodiscard]] DWORD GetTint() const { return tint; }
-	[[nodiscard]] Boundary GetBoundary() const { return { Boundary{ GetProjection(), GetSize() } }; }
 
 	void Advance(float delta) override;
 	virtual void Render() { DrawSprite(*this); }
-	virtual void Collide(const Renderable& other) {}
 };
 
 class Decoration : public Renderable

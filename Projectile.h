@@ -10,6 +10,6 @@ public:
 	}
 
 	EntityType GetType() const override { return EntityType::PlayerProjectile; }
-	void Collide(const Renderable& other) override;
+	void Collide(const Entity& other) override;
 };
 

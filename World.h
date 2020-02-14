@@ -20,6 +20,7 @@ public:
 	Collider collider = { bounds };
 public:
 	World(Player&& player) : player(player) {}
+	Boundary GetBoundary() { return bounds; }
 	void Advance(float delta);
 	void Render();
 	static int64_t GetNextId()
