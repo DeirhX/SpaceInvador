@@ -7,5 +7,6 @@
 #include <memory>
 #include <cmath>
 #include <set>
+#include <numeric>
 
 #include "lib/leetlib.h"

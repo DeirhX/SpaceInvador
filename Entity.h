@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Vector.h"
+
 enum class EntityType
 {
 	Player,
@@ -47,6 +49,6 @@ public:
 		if (life <= 0)
 			Destroy();
 	}
-
+	virtual void Render() { }
 };
 

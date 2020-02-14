@@ -3,22 +3,22 @@
 #include "Renderables.h"
 
 
-std::pair<int, int> Collider::GetSectorIndices(Position pos)
+std::pair<int, int> CollissionSolver::GetSectorIndices(Position pos)
 {
 	int x = std::clamp((int)((pos.x - bounds.min.x) / bounds.GetSize().x * divisions), 0, divisions - 1);
 	int y = std::clamp((int)((pos.y - bounds.min.y) / bounds.GetSize().y * divisions), 0, divisions - 1);
 	return { x, y };
 }
 
-Collider::Sector& Collider::GetSector(Position pos)
+CollissionSolver::Sector& CollissionSolver::GetSector(Position pos)
 {
 	auto i = GetSectorIndices(pos);
 	return sectors[i.first + i.second * divisions];
 }
 
-std::basic_string<Collider::Sector*> Collider::GetSectors(Boundary bounds)
+std::basic_string<CollissionSolver::Sector*> CollissionSolver::GetSectors(Boundary bounds)
 {
-	auto result = std::basic_string<Collider::Sector*>();
+	auto result = std::basic_string<CollissionSolver::Sector*>();
 	auto min = GetSectorIndices(bounds.min);
 	auto max = GetSectorIndices(bounds.max);
 	for(int i = min.first; i <= max.first; ++i)
@@ -29,7 +29,7 @@ std::basic_string<Collider::Sector*> Collider::GetSectors(Boundary bounds)
 	return result;
 }
 
-void Collider::Clear()
+void CollissionSolver::Clear()
 {
 	for( auto& sector : sectors)
 	{
@@ -37,7 +37,7 @@ void Collider::Clear()
 	}
 }
 
-void Collider::Populate(Renderable& renderable)
+void CollissionSolver::Populate(Entity& renderable)
 {
 	for (Sector* sector : GetSectors(renderable.GetBoundary()))
 	{
@@ -45,10 +45,10 @@ void Collider::Populate(Renderable& renderable)
 	}
 }
 
-void Collider::Solve()
+void CollissionSolver::Solve()
 {
 	// Use to filter out same collisions happening in multiple sectors. Pointer equality should suffice.
-	auto collisions = std::set<std::pair<Renderable*, Renderable*>>() ;
+	auto collisions = std::set<std::pair<Entity*, Entity*>>() ;
 		
 	for (auto& sector : sectors)
 	{

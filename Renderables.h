@@ -29,7 +29,7 @@ public:
 	[[nodiscard]] DWORD GetTint() const { return tint; }
 
 	void Advance(float delta) override;
-	virtual void Render() { DrawSprite(*this); }
+	void Render() override { DrawSprite(*this); }
 };
 
 class Decoration : public Renderable

@@ -65,6 +65,7 @@ struct Boundary
 	}
 
 	[[nodiscard]] Size GetSize() { return { max.x - min.x, max.y - min.y }; }
+	[[nodiscard]] Position GetCentre() { return min + 0.5f * GetSize(); }
 	
 	[[nodiscard]] bool IsInside(Position pos) const
 	{
