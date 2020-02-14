@@ -70,3 +70,27 @@ void CollissionSolver::Solve()
 		pair.second->Collide(*pair.first);
 	}
 }
+
+CollisionDir CollissionSolver::Direction(Boundary from, Boundary to)
+{
+	// Compute direction of rectangular collision (spherical surely coming in v2.0 !)
+
+    // distance needed to touch
+	float width = 0.5f * (from.GetSize().x + to.GetSize().x);
+	float height = 0.5f * (from.GetSize().y + to.GetSize().y);
+	// actual distance
+	float dx = from.GetCentre().x - to.GetCentre().x;
+	float dy = from.GetCentre().y - to.GetCentre().y;
+	assert(abs(dx) <= width && abs(dy) <= height);
+
+	// Touching axis will have width == dx or height == dy. Non-touching axis has width > dx or height > dy
+	float wy = width * dy;
+	float hx = height * dx;
+
+	if (wy > hx) {
+		return (wy > -hx) ? CollisionDir::Top : CollisionDir::Left;
+	} else {
+		return (wy > -hx) ? CollisionDir::Right : CollisionDir::Bottom;
+	}
+
+}

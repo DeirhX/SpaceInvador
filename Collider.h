@@ -5,12 +5,21 @@
 
 class Renderable;
 
+enum class CollisionDir 
+{
+	Top,
+	Bottom,
+	Left,
+	Right,
+};
+
 class Collider: public Entity 
 {	using base = Entity;
 public:
 	Collider(Boundary boundary) : base{ boundary.GetCentre(), boundary.GetSize() } {}
 	EntityType GetType() const override { return EntityType::WorldBoundary; }
 };
+
 
 // Collision solver that is not exactly quad-tree but much simpler
 class CollissionSolver
@@ -37,5 +46,6 @@ public:
 	void Clear();	// Prepare for new frame
 	void Populate(Entity& renderable);
 	void Solve();	// Notify all collision pairs
+	static CollisionDir Direction(Boundary from, Boundary to);
 };
 
