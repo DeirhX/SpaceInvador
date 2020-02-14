@@ -12,8 +12,15 @@ protected:
 	void RenderText(std::string_view text, Position centre, Size size);
 };
 
+class IntroScene : public Scene
+{
+public:
+	void Render() override;
+};
+
 class GameplayScene : public Scene
 {
 public:
 	void Render() override;
 };
+

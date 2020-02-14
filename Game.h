@@ -2,6 +2,11 @@
 #include "World.h"
 #include "Scenes.h"
 
+enum class GameSceneId
+{
+	Intro,
+	Gameplay,
+};
 
 class Game
 {
@@ -12,7 +17,9 @@ public:
 protected:
 	float time = 0;
 	int score = 0;
-	GameplayScene sceneGameplay;
+	GameSceneId active_scene = GameSceneId::Intro;
+	IntroScene scene_intro;
+	GameplayScene scene_gameplay;
 public:
 	Game(Sprites& sprites);
 

@@ -30,12 +30,27 @@ void Game::GameLoop()
 		auto elapsed = timer.ElapsedSinceLast() * AdvancePerSecond;
 		time += elapsed;
 		
-		world.Advance(elapsed);
-		world.Render();
-
-		sceneGameplay.Advance(elapsed);
-		sceneGameplay.Render();
-
+		Scene* scene = nullptr;
+		switch (active_scene)
+		{
+		case GameSceneId::Intro:
+			scene = &scene_intro;
+			if (IsKeyDown(VK_LBUTTON) || IsKeyDown(VK_SPACE))
+				active_scene = GameSceneId::Gameplay;
+			else
+				break;
+		case GameSceneId::Gameplay:
+			scene = &scene_gameplay;
+			world.Advance(elapsed);
+			world.Render();
+			break;
+		default:
+			throw std::exception("Forgot the scene");
+		}
+		
+		scene->Advance(elapsed);
+		scene->Render();
+		
 		Flip();
 	}
 }
