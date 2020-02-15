@@ -37,6 +37,7 @@
     <ClCompile Include="Renderables.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
+    <ClCompile Include="AI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\leetlib.h">
@@ -67,5 +68,6 @@
     <ClInclude Include="Renderables.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="AI.h" />
   </ItemGroup>
 </Project>

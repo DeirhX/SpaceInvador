@@ -9,6 +9,11 @@
 #include <cmath>
 #include <set>
 #include <numeric>
-
+#include <algorithm>
+#include <utility>
+#include <cassert>
+#include <array>
 
 #include "lib/leetlib.h"
+
+#define friend friendship_is_not_magic;

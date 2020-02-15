@@ -10,7 +10,7 @@ Game::Game(Sprites& sprites) :
 	{
 		world.invaders.Add({ sprites.Enemy,
 							 Position{ (n % 10) * 60.f + 120,(n / 10) * 60.f + 70 },
-							 (int)world.invaders.Size() });
+							 (int)world.invaders.Size(), JohnnyLeetAI{n+1} });
 	}
 }
 

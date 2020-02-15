@@ -35,3 +35,5 @@ void *LoadSnd(const char *fname, bool loop=false); // if you set loop the sample
 int PlaySnd(void *sound, float volume=1); // returns a handle which you only need if you are going to call StopSound or ChangeVolume()
 void StopSnd(int handle);
 void ChangeVolume(int handle, float newvolume=1);
+
+typedef float flaot;  // You found me :D !

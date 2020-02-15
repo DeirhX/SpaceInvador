@@ -26,14 +26,7 @@ void Projectile::Collide(const Entity& other)
 	}
 	else if (otherType == EntityType::WorldBoundary)
 	{
-		// Compute direction of rectangular collision (spherical surely coming in v2.0 !)
-		CollisionDir dir = CollissionSolver::Direction(GetBoundary(), other.GetBoundary());
-		switch (dir) { // Abort if we're already heading the right direction
-		case CollisionDir::Left:  if (Speed().x >= 0) return; Speed().x *= -1.0f; break;
-		case CollisionDir::Right: if (Speed().x <= 0) return; Speed().x *= -1.0f; break;
-		case CollisionDir::Top:   if (Speed().y >= 0) return; Speed().y *= -1.0f; break;
-		case CollisionDir::Bottom:if (Speed().y <= 0) return; Speed().y *= -1.0f; break;
-		}
+		BouncyAI::OnCollide(*this, other);
 		
 		Rotation() = math::ToRadians(GetSpeed());
 	}

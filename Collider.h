@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 #include "Vector.h"
 #include "Entity.h"
 
@@ -26,21 +25,22 @@ class CollissionSolver
 {
 	struct Sector
 	{
-		std::vector<Entity*> objects;
+		std::vector<Entity*> objects; // Retains allocated memory upon clear()
 	};
 
 	Boundary bounds;
 	int divisions;
-	std::vector<Sector> sectors;
+	std::vector<Sector> sectors; // No realloc here
 
 protected:
-	std::pair<int, int> GetSectorIndices(Position pos);
+	std::pair<int, int> GetSectorIndices(Position pos) const;
 	Sector& GetSector(Position pos);
 	std::basic_string<Sector*> GetSectors(Boundary bounds); // Utilize small string optimization to cheaply construct small 'vectors'
 public:
-	CollissionSolver(Boundary bounds, int divisions = 10) : bounds(bounds), divisions(divisions)
+	CollissionSolver(Boundary bounds, int divisions = 10) : bounds(bounds), divisions(divisions),
+		sectors(divisions * divisions) // Assume roughly square area
 	{
-		sectors.resize(divisions * divisions); // Assume roughly square area
+		
 	}
 
 	void Clear();	// Prepare for new frame

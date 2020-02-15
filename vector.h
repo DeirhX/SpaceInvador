@@ -1,6 +1,4 @@
 #pragma once
-#include <algorithm>
-#include <cassert>
 
 struct Vector2
 {
@@ -66,8 +64,8 @@ struct Boundary
 		max = { centre.x + size.x / 2, centre.y + size.y / 2 };
 	}
 
-	[[nodiscard]] Size GetSize() { return { max.x - min.x, max.y - min.y }; }
-	[[nodiscard]] Position GetCentre() { return min + 0.5f * GetSize(); }
+	[[nodiscard]] Size GetSize() const { return { max.x - min.x, max.y - min.y }; }
+	[[nodiscard]] Position GetCentre() const { return min + 0.5f * GetSize(); }
 	
 	[[nodiscard]] bool IsInside(Position pos) const
 	{

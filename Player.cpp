@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "World.h"
 #include "Game.h"
-#include <algorithm>
 #include "Math.h"
 
 void Player::Advance(float delta)

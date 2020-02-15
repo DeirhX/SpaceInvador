@@ -1,5 +1,4 @@
 #pragma once
-#include <array>
 #include "Entity.h"
 #include "Renderables.h"
 #include "Invader.h"

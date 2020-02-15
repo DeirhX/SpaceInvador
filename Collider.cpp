@@ -3,7 +3,7 @@
 #include "Renderables.h"
 
 
-std::pair<int, int> CollissionSolver::GetSectorIndices(Position pos)
+std::pair<int, int> CollissionSolver::GetSectorIndices(Position pos) const
 {
 	int x = std::clamp((int)((pos.x - bounds.min.x) / bounds.GetSize().x * divisions), 0, divisions - 1);
 	int y = std::clamp((int)((pos.y - bounds.min.y) / bounds.GetSize().y * divisions), 0, divisions - 1);

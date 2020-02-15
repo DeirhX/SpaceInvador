@@ -1,7 +1,5 @@
 #pragma once
 #include "lib/leetlib.h"
-#include <map>
-#include <string>
 
 struct Sprite
 {
