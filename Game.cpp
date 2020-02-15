@@ -4,14 +4,9 @@
 
 Game::Game(Sprites& sprites) :
 	sprites(sprites),
-	world (Player { sprites.Player, {400.f, 550.f}, {50.f} })
+	world ({})
 {
-	for (int n = 0; n < 50; ++n)
-	{
-		world.invaders.Add({ sprites.Enemy,
-							 Position{ (n % 10) * 60.f + 120,(n / 10) * 60.f + 70 },
-							 (int)world.invaders.Size(), JohnnyLeetAI{n+1} });
-	}
+
 }
 
 bool Game::WantQuit()
@@ -31,18 +26,29 @@ void Game::GameLoop()
 		time += elapsed;
 		
 		Scene* scene = nullptr;
-		switch (active_scene)
+		switch (scenes.active)
 		{
 		case GameSceneId::Intro:
-			scene = &scene_intro;
-			if (IsKeyDown(VK_LBUTTON) || IsKeyDown(VK_SPACE))
-				active_scene = GameSceneId::Gameplay;
+			scene = &scenes.intro;
+			if (IsKeyDown(VK_LBUTTON) || IsKeyDown(VK_SPACE)) 
+			{
+				scenes.active = GameSceneId::Gameplay;
+				scenes.gameplay.Begin(world);
+			}
 			else
 				break;
 		case GameSceneId::Gameplay:
-			scene = &scene_gameplay;
+			scene = &scenes.gameplay;
 			world.Advance(elapsed);
 			world.Render();
+			if (world.invaders.Size() == 0)
+			{
+				scenes.active = GameSceneId::FirstVictory;
+				scenes.first_victory.Begin(world);
+			}
+			break;
+		case GameSceneId::FirstVictory:
+			scene = &scenes.first_victory;
 			break;
 		default:
 			throw std::exception("Forgot the scene");

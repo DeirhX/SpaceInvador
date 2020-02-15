@@ -10,7 +10,9 @@ class Player : public Renderable
 	Decoration crosshair{ GetSprites().Glyphs['o'], {}, Size{20, 15} };
 	float shoot_energy = ShootEnergyMax;
 	bool reloaded = true;
+	bool active = true;
 public:
+	Player() : Renderable(GetSprites().Player, {}, {}) { active = false; } 
 	Player(const Sprite& sprite, const Position& base, const Size& size)
 		: Renderable(sprite, base, size)
 	{ }

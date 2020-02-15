@@ -35,11 +35,44 @@ void IntroScene::Render()
 	RenderText("aug 9 2016", { -1, 560}, Size{ 14.f}, 0xFF8866FF);
 }
 
+
+/*
+ * First Gameplay Scene
+ */
+void GameplayScene::Begin(World& world)
+{
+	world = World { Player { GetSprites().Player, {400.f, 550.f}, {50.f} } };
+	for (int n = 0; n < 50; ++n)
+	{
+		world.invaders.Add({ GetSprites().Enemy,
+							 Position{ (n % 10) * 60.f + 120,(n / 10) * 60.f + 70 },
+							 (int)world.invaders.Size(), JohnnyLeetAI{n + 1} });
+	}
+}
+
 void GameplayScene::Render()
 {
 	static const char title[] = "score: ";
 	std::string score_text = title + std::to_string(GetGame().Score());
 	RenderText(score_text, { 200, 30 }, Size { 20.f, 20.f });
+}
+
+
+/*
+ * First Victory Scene 
+ */
+
+void FirstVictoryScene::Begin(World& world)
+{
+	world = World{{}};
+}
+
+void FirstVictoryScene::Render()
+{
+	RenderText("congratulations", { -1, 200 }, Size{ 20.f });
+	RenderText("it is time to leave", { -1, 300 }, Size{ 12.f });
+	RenderText("the planet", { -1, 350 }, Size{ 12.f }, 0xFFFF8866);
+	RenderText("space to start", { -1, 450 }, Size{ 17.f }, 0xFF6688FF);
 }
 
 /*
