@@ -97,7 +97,7 @@ void FirstVictoryScene::Render()
 
 void UnlockedGameplayScene::Begin(World& world)
 {
-	world = World{ Player { GetSprites().Player, {400.f, 550.f}, {50.f} } };
+	world = World{ Player { GetSprites().Player, {400.f, 500.f}, {50.f} } };
 	for (int n = 0; n < 20; ++n)
 	{
 		auto invader = Invader{ GetSprites().Enemy,

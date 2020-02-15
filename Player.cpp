@@ -94,9 +94,10 @@ void Player::HandleShoot(float delta)
 
 		Vector2 dir = { crosshair.GetProjection() - GetProjection() };
 		dir.Normalize();
+		float forward_force = std::max(0.f, Speed() * dir); // Get scalar of thrusting momentum aligned to bullet direction
 
 		auto& bullet = GetWorld().bullets.Add({ GetGame().sprites.Bullet, GetWorld().player.GetProjection() + Size{0, -15.f}, {10} });
-		bullet.Speed() = 4.5f * dir;
+		bullet.Speed() = (forward_force + 4.5f) * dir;
 		bullet.LifeDrain() = 0.5f;
 		bullet.Rotation() = math::ToRadians(dir);
 	}
