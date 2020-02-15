@@ -6,7 +6,7 @@ Game::Game(Sprites& sprites) :
 	sprites(sprites),
 	world ({})
 {
-	scenes.active = GameSceneId::FirstVictory;
+	scenes.active = GameSceneId::Intro;
 }
 
 bool Game::WantQuit()

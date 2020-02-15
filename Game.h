@@ -1,6 +1,7 @@
 #pragma once
 #include "World.h"
 #include "Scenes.h"
+#include "Score.h"
 
 
 class Game
@@ -11,14 +12,15 @@ public:
 	World world;
 protected:
 	float time = 0;
-	int score = 0;
+	Score score;
 	
 	Scenes scenes;
 public:
 	Game(Sprites& sprites);
-
 	const Scenes& GetScenes() { return scenes; }
-	int& Score() { return score; }
+	Score& Score() { return score; }
+	void AddScore(int points) { score.Add(points); }
+	int GetScore() { return score.current; }
 	float& Time() { return time; }
 	
 	bool WantQuit();
@@ -26,24 +28,3 @@ public:
 };
 
 Game& GetGame();
-
-
-// TODO: separate file
-class PerformanceTimer
-{
-	LARGE_INTEGER frequency = {}; // Redundant but I'm sure compiler optimizes it away
-	LARGE_INTEGER last = {};
-public:
-	PerformanceTimer();
-	float ElapsedSinceLast();
-};
-
-class Random
-{
-public:
-	static inline std::random_device rd;
-	static inline std::mt19937 generator{ rd() };
-public:
-	static int Next(int max);
-	
-};

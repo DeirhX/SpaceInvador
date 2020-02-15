@@ -23,7 +23,7 @@ void Invader::Collide(const Entity& other)
 		score_fx.fade_start = 50.0f;
 		SoundEffect::Play(score_fx);
 
-		GetGame().Score() += score;
+		GetGame().AddScore(score);
 		Life() -= 100.f;
 		Destroy();
 	}

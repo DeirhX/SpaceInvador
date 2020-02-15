@@ -26,13 +26,19 @@ void Scene::RenderText(std::string_view text, Position centre, Size size, DWORD 
 
 void IntroScene::Render()
 {
-	RenderText("no mans sky", { -1, 30 }, Size{ 20.f});
-	RenderText("multiplayer alpha", { -1, 100 }, Size{ 12.f});
-	RenderText("best run", { -1, 290 }, Size{ 12.f}, 0xFFFF8866);
-	RenderText("0 worlds", { -1, 350 }, Size{ 27.f});
-	RenderText("space to start", { -1, 220}, Size{ 17.f}, 0xFF6688FF);
-	RenderText("coming soon", { -1, 520 }, Size{ 10.f}, 0xFF66FF88);
-	RenderText("aug 9 2016", { -1, 560}, Size{ 14.f}, 0xFF8866FF);
+	float y = 90;
+	char score_text[18]; // Old skool!
+	sprintf_s(score_text, "%d worlds", GetGame().Score().max);
+	
+	RenderText("no mans sky", { -1, y }, Size{ 20.f});
+	RenderText("multiplayer alpha", { -1, y += 70}, Size{ 12.f});
+	y += 100;
+	RenderText("best run", { -1, y}, Size{ 12.f}, 0xFFFFFFFF);
+	RenderText(score_text, { -1, y += 65 }, Size{ 25.f});
+	y += 100;
+	RenderText("space to start", { -1, y}, Size{ 17.f}, 0xFF6688FF);
+	RenderText("coming soon", { -1, y += 100 }, Size{ 10.f}, 0xFF66FF88);
+	RenderText("aug 9 2016", { -1, y += 40}, Size{ 14.f}, 0xFF8866FF);
 }
 
 void ControlsScene::Render()
@@ -68,7 +74,7 @@ void GameplayScene::Advance(float elapsed)
 void GameplayScene::Render()
 {
 	static const char title[] = "score: ";
-	std::string score_text = title + std::to_string(GetGame().Score());
+	std::string score_text = title + std::to_string(GetGame().GetScore());
 	RenderText(score_text, { 200, 30 }, Size { 20.f, 20.f });
 }
 
