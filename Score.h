@@ -20,5 +20,7 @@ public:
 		current += (int)std::round(points * multiplier);
 		max = std::max(max, current);
 	}
+
+	void Reset() { current = 0; }
 };
 

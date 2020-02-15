@@ -11,13 +11,59 @@ void Player::Advance(float delta)
 	GetMousePos(mx, my);
 	crosshair.Location() = { mx, my };
 
-	if (GetGame().GetScenes().active == GameSceneId::IntroGameplay)
+	if (IsActive() && IsAlive())
+	{
+		HandleShoot(delta);
+		HandleMovement(delta);
+	}
+	else
+	{
+		Speed() *= 0.97f;
+	}
+
+	base::Advance(delta);
+
+	GetWorld().bounds.MakeInside(Location());
+}
+
+void Player::Render()
+{
+	// The sprite is not really facing forward in our system, ugly hotfix
+	if (GetGame().GetScenes().active != GameSceneId::InvadersGameplay)
+		Rotation() += math::half_pi;
+	
+	base::Render();
+	crosshair.Render();
+
+	if (GetGame().GetScenes().active != GameSceneId::InvadersGameplay)
+		Rotation() -= math::half_pi;
+}
+
+void Player::Collide(const Entity& other)
+{
+	if (other.GetType() == EntityType::WorldBoundary)
+	{
+		BouncyAI::OnCollide(*this, other);
+		Speed() *= 0.7f;
+	}
+	else if (other.GetType() == EntityType::Invader)
+	{
+		Life() = 0;
+		SoundEffect::Play("crash", GetLocation(), { 0, -1 });
+		SoundEffect::Play("boom", GetLocation(), { 0, +1 });
+		SoundEffect::Play("clang", GetLocation() + Vector2{ 0, 10.f }, { 0, -1 });
+	}
+}
+
+void Player::HandleMovement(float delta)
+{
+	static constexpr float SpeedDecay = 0.98f;
+	if (GetGame().GetScenes().active == GameSceneId::InvadersGameplay)
 	{
 		Speed() = Position{ IsKeyDown('A') ? -7.0f : IsKeyDown('D') ? 7.0f : 0, 0 };
 	}
 	else
 	{
-		static constexpr float SpeedDecay = 0.98f;
 		auto prev_speed = GetSpeed();
 
 		bool relative_scheme = true;
@@ -45,48 +91,16 @@ void Player::Advance(float delta)
 			if (IsKeyDown('D'))
 				Rotation() += delta * 0.03f * math::pi;
 		}
-		
+
 		if (prev_speed != GetSpeed())
 			thrust_orientation = Rotation();
 		else
 			Speed() *= SpeedDecay;
 	}
-
-	base::Advance(delta);
-
-	GetWorld().bounds.MakeInside(Location());
-
-	HandleShoot(delta);
 }
 
-void Player::Render()
-{
-	// The sprite is not really facing forward in our system, ugly hotfix
-	if (GetGame().GetScenes().active != GameSceneId::IntroGameplay)
-		Rotation() += math::half_pi;
-	
-	base::Render();
-	crosshair.Render();
 
-	if (GetGame().GetScenes().active != GameSceneId::IntroGameplay)
-		Rotation() -= math::half_pi;
-}
 
-void Player::Collide(const Entity& other)
-{
-	if (other.GetType() == EntityType::WorldBoundary)
-	{
-		BouncyAI::OnCollide(*this, other);
-		Speed() *= 0.7f;
-	}
-	else if (other.GetType() == EntityType::Invader)
-	{
-		Life() = 0;
-		SoundEffect::Play("crash", GetLocation(), { 0, -1 });
-		SoundEffect::Play("boom", GetLocation(), { 0, +1 });
-		SoundEffect::Play("clang", GetLocation() + Vector2{ 0, 10.f }, { 0, -1 });
-	}
-}
 
 void Player::HandleShoot(float delta)
 {
@@ -108,6 +122,8 @@ void Player::HandleShoot(float delta)
 		bullet.Speed() = (forward_force + 4.5f) * dir;
 		bullet.LifeDrain() = 0.5f;
 		bullet.Rotation() = math::ToRadians(dir);
+
+		SoundEffect::Play("bam", GetLocation(), { 0, -1 });
 	}
 
 }

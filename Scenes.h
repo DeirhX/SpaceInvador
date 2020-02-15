@@ -6,9 +6,11 @@ enum class GameSceneId
 {
 	Intro,
 	Controls,
-	IntroGameplay,
+	InvadersGameplay,
 	FirstVictory,
-	UnlockedGameplay,
+	ThrustGameplay,
+	ThrustVictory,
+	WormholeGameplay,
 	GameOver,
 	End,
 };
@@ -46,12 +48,24 @@ public:
 	void Begin(class World& world) override { time = 0; }
 	void Advance(float elapsed) override;
 	void Render() override;
+	bool IsDone() override
+	{
+		return IsKeyDown(VK_SPACE);
+	}
 };
 
 class IntroScene : public TextScene
 {
+	bool pressed = true;
 public:
+	void Begin(class World& world) override;
 	void Render() override;
+	bool IsDone() override
+	{
+		if (!pressed && IsKeyDown(VK_SPACE)) return true;
+		if (!IsKeyDown(VK_SPACE)) pressed = false;
+		return false;
+	}
 };
 
 class ControlsScene : public TextScene
@@ -79,16 +93,32 @@ public:
 	void Render() override;
 };
 
-class UnlockedGameplayScene : public GameplayScene
+class SecondVictoryScene : public TextScene
+{
+public:
+	void Render() override;
+};
+
+class ThrustGameplayScene : public GameplayScene
 {
 public:
 	void Begin(World& world) override;
-	//void Render() override;
 	bool IsDone() override
 	{
 		return GetWorld().invaders.Size() == 0;
 	}
 };
+
+class WormholeGameplayScene : public GameplayScene
+{
+public:
+	void Begin(World& world) override;
+	bool IsDone() override
+	{
+		return GetWorld().invaders.Size() == 0;
+	}
+};
+
 
 class Scenes
 {
@@ -97,8 +127,26 @@ public:
 	GameSceneId active = GameSceneId::Intro;
 	IntroScene intro;
 	ControlsScene controls;
-	GameplayScene gameplay;
-	FirstVictoryScene first_victory;
-	UnlockedGameplayScene gameplay_unlocked;
+	GameplayScene invaders_game;
+	FirstVictoryScene invaders_victory;
 	GameOverScene game_over;
+	ThrustGameplayScene thrust_game;
+	SecondVictoryScene thrust_victory;
+	WormholeGameplayScene wormhole_game;
+
+	Scene& FromSceneId(GameSceneId id) 
+	{
+		switch (id)
+		{
+		case GameSceneId::Intro: return intro;
+		case GameSceneId::Controls:	return controls;
+		case GameSceneId::InvadersGameplay: return invaders_game;
+		case GameSceneId::FirstVictory: return invaders_victory;
+		case GameSceneId::ThrustGameplay: return thrust_game;
+		case GameSceneId::ThrustVictory: return thrust_victory;
+		case GameSceneId::WormholeGameplay: return wormhole_game;
+		case GameSceneId::GameOver:return game_over;
+		default: throw std::exception("Forgot the scene");
+		}
+	}
 };

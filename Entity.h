@@ -9,6 +9,7 @@ enum class EntityType
 	Invader,
 	Decoration,
 	WorldBoundary,
+	Wormhole,
 };
 
 class Entity

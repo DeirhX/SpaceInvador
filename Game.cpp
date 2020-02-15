@@ -6,7 +6,7 @@ Game::Game(Sprites& sprites) :
 	sprites(sprites),
 	world ({})
 {
-	scenes.active = GameSceneId::Intro;
+	scenes.active = GameSceneId::ThrustVictory;
 }
 
 bool Game::WantQuit()
@@ -26,54 +26,40 @@ void Game::GameLoop()
 		auto elapsed = timer.ElapsedSinceLast() * AdvancePerSecond;
 		time += elapsed;
 
-		Scene* scene = nullptr;
-		do {
-			switch (scenes.active)
-			{
-			case GameSceneId::Intro:
-				scene = &scenes.intro;
-				break;
-			case GameSceneId::Controls:
-				scene = &scenes.controls;
-				break;
-			case GameSceneId::IntroGameplay:
-				scene = &scenes.gameplay;
-				if (GetWorld().player.GetLife() == 0)
-				{
-					scenes.active = GameSceneId::GameOver;
-					need_begin = true;
-					continue;
-				}
-				break;
-			case GameSceneId::FirstVictory:
-				scene = &scenes.first_victory;
-				break;
-			case GameSceneId::UnlockedGameplay:
-				scene = &scenes.gameplay_unlocked;
-				break;
-			case GameSceneId::GameOver:
-				scene = &scenes.game_over;
-				break;
-			default:
-				throw std::exception("Forgot the scene");
-			}
+		bool is_done = false;
+		do 
+		{
+			Scene& scene = scenes.FromSceneId(scenes.active);
 
 			if (need_begin)
-				scene->Begin(world);
+				scene.Begin(world);
 
 			need_begin = false;
-			scene->Advance(elapsed);
-			scene->Render();
+			scene.Advance(elapsed);
+			scene.Render();
 
-			if (scene->IsDone())
+			if (scenes.active != GameSceneId::GameOver &&
+				GetWorld().player.IsActive() && GetWorld().player.GetLife() == 0)
 			{
-				scenes.active = (GameSceneId)((int)scenes.active + 1);
+				scenes.active = GameSceneId::GameOver;
+				need_begin = true;
+				continue;
+			}
+			
+			is_done = scene.IsDone();
+			if (is_done)
+			{
+				if (scenes.active == GameSceneId::GameOver)
+					scenes.active = GameSceneId::Intro;
+				else 
+					scenes.active = (GameSceneId)((int)scenes.active + 1);
+				
 				if (scenes.active == GameSceneId::End)
 					scenes.active = GameSceneId::Intro;
 				need_begin = true;
 			}
 
-		} while (scene->IsDone());
+		} while (is_done);
 
 		
 		

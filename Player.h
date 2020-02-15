@@ -19,12 +19,13 @@ public:
 		: Renderable(sprite, base, size)
 	{ }
 	EntityType GetType() const override { return EntityType::Player; }
+	bool IsActive() const { return active; }
 	
 	void Advance(float delta) override;
 	void Render() override;
 	void Collide(const Entity& other) override;
 private:
 	void HandleShoot(float delta);
+	void HandleMovement(float delta);
 };
-
 
