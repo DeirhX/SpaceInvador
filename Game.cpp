@@ -38,12 +38,21 @@ void Game::GameLoop()
 				break;
 			case GameSceneId::IntroGameplay:
 				scene = &scenes.gameplay;
+				if (GetWorld().player.GetLife() == 0)
+				{
+					scenes.active = GameSceneId::GameOver;
+					need_begin = true;
+					continue;
+				}
 				break;
 			case GameSceneId::FirstVictory:
 				scene = &scenes.first_victory;
 				break;
 			case GameSceneId::UnlockedGameplay:
 				scene = &scenes.gameplay_unlocked;
+				break;
+			case GameSceneId::GameOver:
+				scene = &scenes.game_over;
 				break;
 			default:
 				throw std::exception("Forgot the scene");

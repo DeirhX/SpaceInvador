@@ -24,6 +24,21 @@ void Scene::RenderText(std::string_view text, Position centre, Size size, DWORD 
 	}
 }
 
+void GameOverScene::Advance(float elapsed)
+{
+	GetWorld().Advance(elapsed);
+	GetWorld().Render();
+}
+
+void GameOverScene::Render()
+{
+	float y = 240;
+	RenderText("game over", { -1, y }, Size{ 30.f - 2.f * std::min(time, 5.0f) });
+	y += 200;
+	RenderText("to continue send 0.01btc", { -1, y }, Size{ 12.f });
+	//RenderText("to continue send 0.01 BTC", { -1, y += 50 }, Size{ 15.f });
+}
+
 void IntroScene::Render()
 {
 	float y = 90;
@@ -83,10 +98,6 @@ void GameplayScene::Render()
  * First Victory Scene 
  */
 
-void FirstVictoryScene::Begin(World& world)
-{
-	world = World{{}};
-}
 
 void FirstVictoryScene::Render()
 {

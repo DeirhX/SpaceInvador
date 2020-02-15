@@ -9,6 +9,7 @@ enum class GameSceneId
 	IntroGameplay,
 	FirstVictory,
 	UnlockedGameplay,
+	GameOver,
 	End,
 };
 
@@ -17,7 +18,7 @@ class Scene
 protected:
 	float time = 0;
 public:
-	virtual void Begin(class World& world) { }
+	virtual void Begin(class World& world) { world = World{ {} }; time = 0; }
 	virtual void Advance(float elapsed) { time += elapsed; }
 	virtual void Render() = 0;
 	virtual bool IsDone() = 0;
@@ -25,21 +26,10 @@ protected:
 	void RenderText(std::string_view text, Position centre, Size size, DWORD mask = 0xffffffff);
 };
 
-class IntroScene : public Scene
-{
-public:
-	void Render() override;
-	bool IsDone() override
-	{
-		return IsKeyDown(VK_LBUTTON) || IsKeyDown(VK_SPACE);
-	}
-};
-
-class ControlsScene : public Scene
+class TextScene : public Scene
 {
 	bool pressed = true;
 public:
-	void Render() override;
 	bool IsDone() override
 	{
 		if (!pressed && (IsKeyDown(VK_LBUTTON) || IsKeyDown(VK_SPACE)))
@@ -48,6 +38,27 @@ public:
 			pressed = false;
 		return false;
 	}
+};
+
+class GameOverScene : public TextScene
+{
+public:
+	void Begin(class World& world) override { time = 0; }
+	void Advance(float elapsed) override;
+	void Render() override;
+};
+
+class IntroScene : public TextScene
+{
+public:
+	void Render() override;
+};
+
+class ControlsScene : public TextScene
+{
+public:
+	void Render() override;
+
 };
 
 class GameplayScene : public Scene
@@ -62,15 +73,10 @@ public:
 	}
 };
 
-class FirstVictoryScene : public Scene
+class FirstVictoryScene : public TextScene
 {
 public:
-	void Begin(World& world) override;
 	void Render() override;
-	bool IsDone() override
-	{
-		return IsKeyDown(VK_LBUTTON) || IsKeyDown(VK_SPACE);
-	}
 };
 
 class UnlockedGameplayScene : public GameplayScene
@@ -94,4 +100,5 @@ public:
 	GameplayScene gameplay;
 	FirstVictoryScene first_victory;
 	UnlockedGameplayScene gameplay_unlocked;
+	GameOverScene game_over;
 };

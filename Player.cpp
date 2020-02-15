@@ -3,6 +3,7 @@
 #include "World.h"
 #include "Game.h"
 #include "Math.h"
+#include "Sounds.h"
 
 void Player::Advance(float delta)
 {
@@ -77,6 +78,13 @@ void Player::Collide(const Entity& other)
 	{
 		BouncyAI::OnCollide(*this, other);
 		Speed() *= 0.7f;
+	}
+	else if (other.GetType() == EntityType::Invader)
+	{
+		Life() = 0;
+		SoundEffect::Play("crash", GetLocation(), { 0, -1 });
+		SoundEffect::Play("boom", GetLocation(), { 0, +1 });
+		SoundEffect::Play("clang", GetLocation() + Vector2{ 0, 10.f }, { 0, -1 });
 	}
 }
 
