@@ -6,7 +6,7 @@ Game::Game(Sprites& sprites) :
 	sprites(sprites),
 	world ({})
 {
-	scenes.intro.Begin(world);
+	scenes.active = GameSceneId::FirstVictory;
 }
 
 bool Game::WantQuit()
@@ -19,14 +19,14 @@ bool Game::WantQuit()
 void Game::GameLoop()
 {
 	PerformanceTimer timer;
-	
+	bool need_begin = true;
+
 	while (!WantQuit())
 	{
 		auto elapsed = timer.ElapsedSinceLast() * AdvancePerSecond;
 		time += elapsed;
 
 		Scene* scene = nullptr;
-		bool need_begin = false;
 		do {
 			switch (scenes.active)
 			{
@@ -36,11 +36,14 @@ void Game::GameLoop()
 			case GameSceneId::Controls:
 				scene = &scenes.controls;
 				break;
-			case GameSceneId::Gameplay:
+			case GameSceneId::IntroGameplay:
 				scene = &scenes.gameplay;
 				break;
 			case GameSceneId::FirstVictory:
 				scene = &scenes.first_victory;
+				break;
+			case GameSceneId::UnlockedGameplay:
+				scene = &scenes.gameplay_unlocked;
 				break;
 			default:
 				throw std::exception("Forgot the scene");
@@ -48,12 +51,16 @@ void Game::GameLoop()
 
 			if (need_begin)
 				scene->Begin(world);
+
+			need_begin = false;
 			scene->Advance(elapsed);
 			scene->Render();
 
 			if (scene->IsDone())
 			{
 				scenes.active = (GameSceneId)((int)scenes.active + 1);
+				if (scenes.active == GameSceneId::End)
+					scenes.active = GameSceneId::Intro;
 				need_begin = true;
 			}
 

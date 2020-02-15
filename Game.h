@@ -17,6 +17,7 @@ protected:
 public:
 	Game(Sprites& sprites);
 
+	const Scenes& GetScenes() { return scenes; }
 	int& Score() { return score; }
 	float& Time() { return time; }
 	

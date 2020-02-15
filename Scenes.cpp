@@ -84,15 +84,28 @@ void FirstVictoryScene::Begin(World& world)
 
 void FirstVictoryScene::Render()
 {
-	float y = 150;
+	float y = 90;
 	RenderText("congratulations", { -1, y }, Size{ 20.f });
 	RenderText("it is time to leave", { -1, y += 50}, Size{ 12.f });
-	RenderText("the planet", { -1, y += 25 }, Size{ 12.f }, 0xFFFF8866);
+	RenderText("the planet", { -1, y += 30 }, Size{ 12.f }, 0xFFFF8866);
 	y += 140;
-	RenderText("use w to thrust", { -1, y += 0 }, Size{ 17.f }, 0xFFFFFFFF);
+	//RenderText("thrusters engaged", { -1, y += 0 }, Size{ 17.f }, 0xFFFFFFFF);
+	RenderText("use w to thrust", { -1, y += 70 }, Size{ 17.f }, 0xFFFFFFFF);
 	RenderText("use s to brake", { -1, y += 50 }, Size{ 17.f }, 0xFFFFFFFF);
 	RenderText("space to start", { -1, y += 50 }, Size{ 17.f }, 0xFFFFFFFF);
 }
+
+void UnlockedGameplayScene::Begin(World& world)
+{
+	world = World{ Player { GetSprites().Player, {400.f, 550.f}, {50.f} } };
+	for (int n = 0; n < 20; ++n)
+	{
+		world.invaders.Add({ GetSprites().Enemy,
+							 Position{ (n % 10) * 60.f + 120,(n / 10) * 60.f + 70 },
+							 (int)world.invaders.Size(), BouncyAI{} });
+	}
+}
+
 
 /*
  *  Your ship has been upgraded. It may feel the same but really its not.

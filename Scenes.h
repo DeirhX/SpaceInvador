@@ -6,8 +6,10 @@ enum class GameSceneId
 {
 	Intro,
 	Controls,
-	Gameplay,
+	IntroGameplay,
 	FirstVictory,
+	UnlockedGameplay,
+	End,
 };
 
 class Scene
@@ -65,8 +67,20 @@ class FirstVictoryScene : public Scene
 public:
 	void Begin(World& world) override;
 	void Render() override;
-	bool IsDone() override {
+	bool IsDone() override
+	{
 		return IsKeyDown(VK_LBUTTON) || IsKeyDown(VK_SPACE);
+	}
+};
+
+class UnlockedGameplayScene : public GameplayScene
+{
+public:
+	void Begin(World& world) override;
+	//void Render() override;
+	bool IsDone() override
+	{
+		return GetWorld().invaders.Size() == 0;
 	}
 };
 
@@ -79,4 +93,5 @@ public:
 	ControlsScene controls;
 	GameplayScene gameplay;
 	FirstVictoryScene first_victory;
+	UnlockedGameplayScene gameplay_unlocked;
 };

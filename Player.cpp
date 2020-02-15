@@ -6,22 +6,78 @@
 
 void Player::Advance(float delta)
 {
-	Speed() = Position{ IsKeyDown('A') ? -7.0f : IsKeyDown('D') ? 7.0f : 0, 0 };
+	float mx, my;
+	GetMousePos(mx, my);
+	crosshair.Location() = { mx, my };
+
+	if (GetGame().GetScenes().active == GameSceneId::IntroGameplay)
+	{
+		Speed() = Position{ IsKeyDown('A') ? -7.0f : IsKeyDown('D') ? 7.0f : 0, 0 };
+	}
+	else
+	{
+		static constexpr float SpeedDecay = 0.98f;
+		auto prev_speed = GetSpeed();
+
+		bool relative_scheme = true;
+		if (relative_scheme)
+		{
+			if (IsKeyDown('W'))
+				Speed() += 0.1f * math::FromRadians(Rotation());
+			if (IsKeyDown('S'))
+				Speed() += 0.1f * math::FromRadians(Rotation() + math::pi);
+			if (IsKeyDown('A'))
+				Speed() += 0.1f * math::FromRadians(thrust_orientation - math::half_pi);
+			if (IsKeyDown('D'))
+				Speed() += 0.1f * math::FromRadians(thrust_orientation + math::half_pi);
+
+			Rotation() = math::ToRadians(crosshair.GetLocation() - GetLocation());
+		}
+		else
+		{
+			if (IsKeyDown('W'))
+				Speed() += 0.1f * math::FromRadians(Rotation());
+			if (IsKeyDown('S'))
+				Speed() += 0.1f * math::FromRadians(Rotation() + math::pi);
+			if (IsKeyDown('A'))
+				Rotation() -= delta * 0.03f * math::pi;
+			if (IsKeyDown('D'))
+				Rotation() += delta * 0.03f * math::pi;
+		}
+		
+		if (prev_speed != GetSpeed())
+			thrust_orientation = Rotation();
+		else
+			Speed() *= SpeedDecay;
+	}
 
 	base::Advance(delta);
 
 	GetWorld().bounds.MakeInside(Location());
 
-	float mx, my;
-	GetMousePos(mx, my);
-	crosshair.Location() = { mx, my };
 	HandleShoot(delta);
 }
 
 void Player::Render()
 {
+	// The sprite is not really facing forward in our system, ugly hotfix
+	if (GetGame().GetScenes().active != GameSceneId::IntroGameplay)
+		Rotation() += math::half_pi;
+	
 	base::Render();
 	crosshair.Render();
+
+	if (GetGame().GetScenes().active != GameSceneId::IntroGameplay)
+		Rotation() -= math::half_pi;
+}
+
+void Player::Collide(const Entity& other)
+{
+	if (other.GetType() == EntityType::WorldBoundary)
+	{
+		BouncyAI::OnCollide(*this, other);
+		Speed() *= 0.7f;
+	}
 }
 
 void Player::HandleShoot(float delta)

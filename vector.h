@@ -7,11 +7,14 @@ struct Vector2
 
 	Vector2() = default;
 	Vector2(float x, float y) : x(x), y(y) {}
-	Vector2 operator+ (const Vector2& other) const { return { x + other.x, y + other.y }; }
-	Vector2 operator- (const Vector2& other) const { return { x - other.x, y - other.y }; }
+	Vector2 operator+ (Vector2 other) const { return { x + other.x, y + other.y }; }
+	Vector2 operator- (Vector2 other) const { return { x - other.x, y - other.y }; }
 	Vector2 operator* (float by) const { return { x * by, y * by }; }
-	Vector2& operator+= (const Vector2& other) { x += other.x; y += other.y; return *this; };
-	Vector2& operator-= (const Vector2& other) { x -= other.x; y -= other.y; return *this; };
+	Vector2& operator+= (Vector2 other) { x += other.x; y += other.y; return *this; };
+	Vector2& operator-= (Vector2 other) { x -= other.x; y -= other.y; return *this; };
+	Vector2& operator*= (float by) { x *= by; y *= by; return *this; };
+	bool operator == (Vector2 other) const { return x == other.x && y == other.y; }
+	bool operator != (Vector2 other) const { return x != other.x || y != other.y; }
 
 	float GetLength() const { return std::sqrt(x * x + y * y); }
 	Vector2& Normalize()
