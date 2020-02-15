@@ -97,3 +97,8 @@ float PerformanceTimer::ElapsedSinceLast()
 	last = now;
 	return (float)diff.QuadPart / 1000000;
 }
+
+int Random::Next(int max)
+{
+	return generator();
+}

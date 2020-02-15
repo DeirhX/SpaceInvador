@@ -37,3 +37,13 @@ public:
 	PerformanceTimer();
 	float ElapsedSinceLast();
 };
+
+class Random
+{
+public:
+	static inline std::random_device rd;
+	static inline std::mt19937 generator{ rd() };
+public:
+	static int Next(int max);
+	
+};

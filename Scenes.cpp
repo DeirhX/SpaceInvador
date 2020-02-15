@@ -100,9 +100,12 @@ void UnlockedGameplayScene::Begin(World& world)
 	world = World{ Player { GetSprites().Player, {400.f, 550.f}, {50.f} } };
 	for (int n = 0; n < 20; ++n)
 	{
-		world.invaders.Add({ GetSprites().Enemy,
-							 Position{ (n % 10) * 60.f + 120,(n / 10) * 60.f + 70 },
-							 (int)world.invaders.Size(), BouncyAI{} });
+		auto invader = Invader{ GetSprites().Enemy,
+							   Position{ (n % 10) * 60.f + 120,(n / 10) * 60.f + 70 },
+							   (int)world.invaders.Size(), BouncyAI{} };
+		std::uniform_real_distribution<float> dist(-3.0f, 3.0f);
+		invader.Speed() = { dist(Random::generator), dist(Random::generator) };
+		world.invaders.Add(invader);
 	}
 }
 
