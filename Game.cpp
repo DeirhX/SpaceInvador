@@ -6,7 +6,7 @@ Game::Game(Sprites& sprites) :
 	sprites(sprites),
 	world ({})
 {
-
+	scenes.intro.Begin(world);
 }
 
 bool Game::WantQuit()
@@ -24,38 +24,42 @@ void Game::GameLoop()
 	{
 		auto elapsed = timer.ElapsedSinceLast() * AdvancePerSecond;
 		time += elapsed;
-		
+
 		Scene* scene = nullptr;
-		switch (scenes.active)
-		{
-		case GameSceneId::Intro:
-			scene = &scenes.intro;
-			if (IsKeyDown(VK_LBUTTON) || IsKeyDown(VK_SPACE)) 
+		bool need_begin = false;
+		do {
+			switch (scenes.active)
 			{
-				scenes.active = GameSceneId::Gameplay;
-				scenes.gameplay.Begin(world);
-			}
-			else
+			case GameSceneId::Intro:
+				scene = &scenes.intro;
 				break;
-		case GameSceneId::Gameplay:
-			scene = &scenes.gameplay;
-			world.Advance(elapsed);
-			world.Render();
-			if (world.invaders.Size() == 0)
-			{
-				scenes.active = GameSceneId::FirstVictory;
-				scenes.first_victory.Begin(world);
+			case GameSceneId::Controls:
+				scene = &scenes.controls;
+				break;
+			case GameSceneId::Gameplay:
+				scene = &scenes.gameplay;
+				break;
+			case GameSceneId::FirstVictory:
+				scene = &scenes.first_victory;
+				break;
+			default:
+				throw std::exception("Forgot the scene");
 			}
-			break;
-		case GameSceneId::FirstVictory:
-			scene = &scenes.first_victory;
-			break;
-		default:
-			throw std::exception("Forgot the scene");
-		}
+
+			if (need_begin)
+				scene->Begin(world);
+			scene->Advance(elapsed);
+			scene->Render();
+
+			if (scene->IsDone())
+			{
+				scenes.active = (GameSceneId)((int)scenes.active + 1);
+				need_begin = true;
+			}
+
+		} while (scene->IsDone());
+
 		
-		scene->Advance(elapsed);
-		scene->Render();
 		
 		Flip();
 	}

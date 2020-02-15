@@ -35,6 +35,14 @@ void IntroScene::Render()
 	RenderText("aug 9 2016", { -1, 560}, Size{ 14.f}, 0xFF8866FF);
 }
 
+void ControlsScene::Render()
+{
+	float y = 200;
+	RenderText("use a to move left", { -1, y += 0 }, Size{ 17.f }, 0xFFFFFFFF);
+	RenderText("use d to move right", { -1, y += 50 }, Size{ 17.f }, 0xFFFFFFFF);
+	RenderText("mouse to shoot", { -1, y += 50 }, Size{ 17.f }, 0xFFFFFFFF);
+}
+
 
 /*
  * First Gameplay Scene
@@ -48,6 +56,13 @@ void GameplayScene::Begin(World& world)
 							 Position{ (n % 10) * 60.f + 120,(n / 10) * 60.f + 70 },
 							 (int)world.invaders.Size(), JohnnyLeetAI{n + 1} });
 	}
+}
+
+void GameplayScene::Advance(float elapsed)
+{
+	Scene::Advance(elapsed);
+	GetWorld().Advance(elapsed);
+	GetWorld().Render();
 }
 
 void GameplayScene::Render()
@@ -69,10 +84,14 @@ void FirstVictoryScene::Begin(World& world)
 
 void FirstVictoryScene::Render()
 {
-	RenderText("congratulations", { -1, 200 }, Size{ 20.f });
-	RenderText("it is time to leave", { -1, 300 }, Size{ 12.f });
-	RenderText("the planet", { -1, 350 }, Size{ 12.f }, 0xFFFF8866);
-	RenderText("space to start", { -1, 450 }, Size{ 17.f }, 0xFF6688FF);
+	float y = 150;
+	RenderText("congratulations", { -1, y }, Size{ 20.f });
+	RenderText("it is time to leave", { -1, y += 50}, Size{ 12.f });
+	RenderText("the planet", { -1, y += 25 }, Size{ 12.f }, 0xFFFF8866);
+	y += 140;
+	RenderText("use w to thrust", { -1, y += 0 }, Size{ 17.f }, 0xFFFFFFFF);
+	RenderText("use s to brake", { -1, y += 50 }, Size{ 17.f }, 0xFFFFFFFF);
+	RenderText("space to start", { -1, y += 50 }, Size{ 17.f }, 0xFFFFFFFF);
 }
 
 /*

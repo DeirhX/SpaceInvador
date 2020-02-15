@@ -11,7 +11,7 @@ class World
 {
 	static inline int64_t last_id = 0;
 public:
-	Boundary bounds{ Position{10, 10}, { Position{700, 550} } };
+	Boundary bounds{ Position{10, 10}, { Position{800, 550} } };
 
 	// Later move to owning pointers
 	Renderables<Invader> invaders;
