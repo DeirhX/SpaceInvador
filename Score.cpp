@@ -2,6 +2,7 @@
 #include <Shlwapi.h>
 #include <fstream>
 #include "Score.h"
+#include "PhatLeetLib.h"
 
 Score::Score()
 {
@@ -26,4 +27,21 @@ void Score::Save()
 {
 	std::fstream file(filepath, std::ios::out);
 	file << max;
+}
+
+std::string Score::DiscoverWorld()
+{
+	std::string name;
+	
+	auto vowels = "aeiou"; // y sucks
+	std::normal_distribution<float> dist(5, 5);
+	int length = 2 + (int)std::round(dist(Random::generator));
+	for (int i=0; i < length; ++i)
+	{
+		if (i % 3 == 1)
+			name += vowels[Random::Next(5)];
+		else
+			name += 'a' + Random::Next('z' - 'a');
+	}
+	return name;
 }

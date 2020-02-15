@@ -6,6 +6,7 @@ class Score
 	std::string filepath; // Forgive me for allowing a dynamic allocation here. const char [MAX_PATH] is so ugly.
 public:
 	float multiplier = 1.f;
+	std::string world;
 
 	int current = 0;
 	int max = 0;
@@ -22,5 +23,6 @@ public:
 	}
 
 	void Reset() { current = 0; }
+	std::string DiscoverWorld();
 };
 

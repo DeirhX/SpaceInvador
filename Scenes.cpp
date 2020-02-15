@@ -63,9 +63,19 @@ void IntroScene::Render()
 	RenderText("aug 9 2016", { -1, y += 40}, Size{ 14.f}, 0xFFFFFFFF);
 }
 
+void ControlsScene::Begin(World& world)
+{
+	time = 0;
+	GetGame().Score().world = GetGame().Score().DiscoverWorld();
+	discover_text = "planet " + GetGame().Score().world;
+}
+
 void ControlsScene::Render()
 {
-	float y = 200;
+	float y = 100;
+	RenderText("approaching", { -1, y }, Size{ 18.f });
+	RenderText(discover_text, { -1, y+=60 }, Size{ 20.f });
+	y += 200;
 	RenderText("use a to move left", { -1, y += 0 }, Size{ 17.f }, 0xFFFFFFFF);
 	RenderText("use d to move right", { -1, y += 50 }, Size{ 17.f }, 0xFFFFFFFF);
 	RenderText("mouse to shoot", { -1, y += 50 }, Size{ 17.f }, 0xFFFFFFFF);

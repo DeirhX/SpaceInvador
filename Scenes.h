@@ -70,7 +70,9 @@ public:
 
 class ControlsScene : public TextScene
 {
+	std::string discover_text;
 public:
+	void Begin(World& world) override;
 	void Render() override;
 
 };

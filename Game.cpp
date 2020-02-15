@@ -6,7 +6,7 @@ Game::Game(Sprites& sprites) :
 	sprites(sprites),
 	world ({})
 {
-	scenes.active = GameSceneId::ThrustVictory;
+	scenes.active = GameSceneId::Intro;
 }
 
 bool Game::WantQuit()
@@ -93,7 +93,7 @@ float PerformanceTimer::ElapsedSinceLast()
 	return (float)diff.QuadPart / 1000000;
 }
 
-int Random::Next(int max)
+int Random::Next(int upper_bound)
 {
-	return generator();
+	return generator() % upper_bound;
 }
