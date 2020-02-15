@@ -9,7 +9,7 @@ public:
 	virtual void Advance(float elapsed) { time += elapsed; }
 	virtual void Render() = 0;
 protected:
-	void RenderText(std::string_view text, Position centre, Size size);
+	void RenderText(std::string_view text, Position centre, Size size, DWORD mask = 0xffffffff);
 };
 
 class IntroScene : public Scene

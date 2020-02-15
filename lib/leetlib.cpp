@@ -613,7 +613,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR cmd, INT )
 AdjustWindowRect(&r,style,false);
 
     // Create the application's window
-     hWnd = CreateWindow( "crapcrap", "crap crap",
+     hWnd = CreateWindow( "crapcrap", "Best game ever, especially the multiplayer",
                               style, 0,0,r.right-r.left,r.bottom-r.top,
                               GetDesktopWindow(), NULL, wc.hInstance, NULL );
 	
