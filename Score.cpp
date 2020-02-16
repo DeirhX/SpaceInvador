@@ -35,7 +35,7 @@ std::string Score::DiscoverWorld()
 	
 	auto vowels = "aeiou"; // y sucks
 	std::normal_distribution<float> dist(5, 5);
-	int length = std::max(2, (int)std::round(dist(Random::generator)));
+	int length = std::clamp( (int)std::round(dist(Random::generator)), 2, 10);
 	for (int i=0; i < length; ++i)
 	{
 		if (i % 4 == 1)

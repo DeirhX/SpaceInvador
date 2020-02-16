@@ -11,6 +11,9 @@ enum class GameSceneId
 	ThrustGameplay,
 	ThrustVictory,
 	WormholeGameplay,
+	WormholeVictory,
+	AmbushGameplay,
+	AmbushVictory,
 	GameOver,
 	End,
 };
@@ -28,6 +31,9 @@ protected:
 	void RenderText(std::string_view text, Position centre, Size size, DWORD mask = 0xffffffff);
 };
 
+/*
+ * Base classes
+ */
 class TextScene : public Scene
 {
 	bool pressed = true;
@@ -42,18 +48,24 @@ public:
 	}
 };
 
-class GameOverScene : public TextScene
+class GameplayScene : public Scene
 {
 public:
-	void Begin(class World& world) override { time = 0; }
+	void Begin(World& world) override;
 	void Advance(float elapsed) override;
 	void Render() override;
 	bool IsDone() override
 	{
-		return IsKeyDown(VK_SPACE);
+		return GetWorld().invaders.Size() == 0;
 	}
+	static void GenerateEnemiesOutsideScreen(World& world, int count);
+	static void GenerateEnemiesAroundPoint(World& world, Boundary bounds, int count);
 };
 
+
+/*
+ * Intro & Outro scenes
+ */
 class IntroScene : public TextScene
 {
 	bool pressed = true;
@@ -77,29 +89,57 @@ public:
 
 };
 
-class GameplayScene : public Scene
+class GameOverScene : public TextScene
 {
 public:
-	void Begin(World& world) override;
+	void Begin(class World& world) override { time = 0; }
 	void Advance(float elapsed) override;
 	void Render() override;
 	bool IsDone() override
 	{
-		return GetWorld().invaders.Size() == 0;
+		return IsKeyDown(VK_SPACE);
 	}
 };
 
+
+
+/*
+ * Victory scenes
+ */
 class FirstVictoryScene : public TextScene
 {
 public:
+	void Begin(World& world) override;
 	void Render() override;
 };
 
-class SecondVictoryScene : public TextScene
+class ThrustVictoryScene : public TextScene
 {
 public:
+	void Begin(World& world) override;
 	void Render() override;
 };
+
+class WormholeVictoryScene : public TextScene
+{
+	std::string discover_text;
+public:
+	void Begin(World& world) override;
+	void Render() override;
+};
+
+class AmbushVictoryScene : public TextScene
+{
+	std::string next_wave_text;
+public:
+	int next_wave = 40;
+	void Begin(World& world) override;
+	void Render() override;
+};
+
+/*
+ * Gameplay scenes
+ */
 
 class ThrustGameplayScene : public GameplayScene
 {
@@ -122,6 +162,15 @@ public:
 	}
 };
 
+class AmbushGameplayScene : public GameplayScene
+{
+public:
+	void Begin(World& world) override;
+	bool IsDone() override
+	{
+		return GetWorld().invaders.Size() == 0;
+	}
+};
 
 class Scenes
 {
@@ -134,8 +183,11 @@ public:
 	FirstVictoryScene invaders_victory;
 	GameOverScene game_over;
 	ThrustGameplayScene thrust_game;
-	SecondVictoryScene thrust_victory;
+	ThrustVictoryScene thrust_victory;
 	WormholeGameplayScene wormhole_game;
+	WormholeVictoryScene wormhole_victory;
+	AmbushGameplayScene ambush_game;
+	AmbushVictoryScene ambush_victory;
 
 	// Ok, this is growing ugly...
 	Scene& FromSceneId(GameSceneId id) 
@@ -149,6 +201,9 @@ public:
 		case GameSceneId::ThrustGameplay: return thrust_game;
 		case GameSceneId::ThrustVictory: return thrust_victory;
 		case GameSceneId::WormholeGameplay: return wormhole_game;
+		case GameSceneId::WormholeVictory: return wormhole_victory;
+		case GameSceneId::AmbushGameplay: return ambush_game;
+		case GameSceneId::AmbushVictory: return ambush_victory;
 		case GameSceneId::GameOver:return game_over;
 		default: throw std::exception("Forgot the scene");
 		}

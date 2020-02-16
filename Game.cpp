@@ -51,7 +51,9 @@ void Game::GameLoop()
 			{
 				if (scenes.active == GameSceneId::GameOver)
 					scenes.active = GameSceneId::Intro;
-				else 
+				else if (scenes.active == GameSceneId::AmbushVictory )
+					scenes.active = GameSceneId::AmbushGameplay; // Give us more money to develop more
+				else
 					scenes.active = (GameSceneId)((int)scenes.active + 1);
 				
 				if (scenes.active == GameSceneId::End)
