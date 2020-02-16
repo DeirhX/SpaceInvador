@@ -279,7 +279,7 @@ void AmbushGameplayScene::Begin(World& world)
 	world = World{ Player { GetSprites().Player, {400.f, 500.f}, {50.f} } };
 
 	const auto& scene_data = GetGame().GetScenes().ambush_victory;
-	GameplayScene::GenerateEnemiesOutsideScreen(world, scene_data.GetInvaderCount(), 1.f + 0.1 * scene_data.wave_num );
+	GameplayScene::GenerateEnemiesOutsideScreen(world, scene_data.GetInvaderCount(), 1.f + 0.1f * scene_data.wave_num );
 }
 
 
