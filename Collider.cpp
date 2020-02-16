@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Collider.h"
 #include "Renderables.h"
+#include "Math.h"
 
 
 std::pair<int, int> CollissionSolver::GetSectorIndices(Position pos) const
@@ -83,7 +84,7 @@ CollisionDir CollissionSolver::Direction(Boundary from, Boundary to)
 	// actual distance
 	float dx = from.GetCentre().x - to.GetCentre().x;
 	float dy = from.GetCentre().y - to.GetCentre().y;
-	assert(abs(dx) <= width && abs(dy) <= height);
+	assert(abs(dx) <= width + math::epsilon && abs(dy) <= height + math::epsilon);
 
 	// Touching axis will have width == dx or height == dy. Non-touching axis has width > dx or height > dy
 	float wy = width * dy;
