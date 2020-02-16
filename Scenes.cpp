@@ -43,13 +43,14 @@ void GameOverScene::Render()
 void IntroScene::Begin(World& world)
 {
 	world = World{Player{}};
+	pressed = true;
 	time = 0;
 	GetGame().Score().Reset();
 }
 
 void IntroScene::Render()
 {
-	float y = 90;
+	float y = 40;
 	char score_text[18]; // Old skool!
 	sprintf_s(score_text, "%d worlds", GetGame().Score().max);
 	
@@ -58,10 +59,10 @@ void IntroScene::Render()
 	y += 100;
 	RenderText("best run", { -1, y}, Size{ 12.f}, 0xFFFFFFFF);
 	RenderText(score_text, { -1, y += 65 }, Size{ 25.f});
-	y += 100;
+	y += 150;
 	RenderText("space to start", { -1, y}, Size{ 17.f}, 0xFFFFFFFF);
-	RenderText("coming soon", { -1, y += 100 }, Size{ 10.f}, 0xFFFFFFFF);
-	RenderText("aug 9 2016", { -1, y += 40}, Size{ 14.f}, 0xFFFFFFFF);
+	RenderText("you may not meet other players", { -1, y += 100 }, Size{ 8.f}, 0xFFFFFFFF);
+	RenderText("because they are very far away", { -1, y += 40}, Size{ 8.f}, 0xFFFFFFFF);
 }
 
 void ControlsScene::Begin(World& world)
@@ -113,23 +114,27 @@ void GameplayScene::Render()
 
 void GameplayScene::GenerateEnemiesOutsideScreen(World& world, int count)
 {
-	// Generate well outside visible screen
-	std::uniform_real_distribution<float> dist_pos(-500, 500);
-	Position position = Position{ dist_pos(Random::generator), dist_pos(Random::generator) };
-	position += GetWorld().bounds.GetCentre();
-	position.x += GetWorld().bounds.GetSize().x * ((position.x > GetWorld().bounds.GetCentre().x) ? 1 : -1);
-	position.y += GetWorld().bounds.GetSize().y * ((position.y > GetWorld().bounds.GetCentre().y) ? 1 : -1);
+	for (int i = 0; i < count; ++i)
+	{
+		// Generate well outside visible screen
+		std::uniform_real_distribution<float> dist_pos(-500, 500);
+		Position position = Position{ dist_pos(Random::generator), dist_pos(Random::generator) };
+		position += GetWorld().bounds.GetCentre();
+		position.x += GetWorld().bounds.GetSize().x * ((position.x > GetWorld().bounds.GetCentre().x) ? 1 : -1);
+		position.y += GetWorld().bounds.GetSize().y * ((position.y > GetWorld().bounds.GetCentre().y) ? 1 : -1);
 
-	// Head roughly towards centre
-	std::uniform_real_distribution<float> rnd_float(-1.0f, 1.0f);
-	Vector2 speed = (2.0f + rnd_float(Random::generator)) * (world.GetBoundary().GetCentre() - position).Normalize();
-	speed.x += 0.15f * rnd_float(Random::generator);;
-	speed.y += 0.15f * rnd_float(Random::generator);
+		// Head roughly towards centre
+		std::uniform_real_distribution<float> rnd_float(-1.0f, 1.0f);
+		Vector2 speed = (2.0f + rnd_float(Random::generator)) * (world.GetBoundary().GetCentre() - position).Normalize();
+		speed.x += 0.15f * rnd_float(Random::generator);;
+		speed.y += 0.15f * rnd_float(Random::generator);
 
-	auto invader = Invader{ GetSprites().Enemy,
-					   position,
-					   (int)world.invaders.Size(), BouncyAI{} };
-	invader.Speed() = speed;
+		auto invader = Invader{ GetSprites().Enemy,
+						   position,
+						   (int)world.invaders.Size(), BouncyAI{} };
+		invader.Speed() = speed;
+		world.invaders.Add(invader);
+	}
 }
 
 void GameplayScene::GenerateEnemiesAroundPoint(World& world, Boundary bounds, int count)

@@ -38,6 +38,11 @@ class TextScene : public Scene
 {
 	bool pressed = true;
 public:
+	void Begin(World& world) override
+	{
+		pressed = true;;
+		Scene::Begin(world);
+	}
 	bool IsDone() override
 	{
 		if (!pressed && (IsKeyDown(VK_LBUTTON) || IsKeyDown(VK_SPACE)))
