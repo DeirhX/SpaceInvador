@@ -118,7 +118,7 @@ public:
 	void Begin(World& world) override;
 	bool IsDone() override
 	{
-		return GetWorld().invaders.Size() == 0;
+		return GetWorld().invaders.Size() == 0 || wormhole.GetActivated();
 	}
 };
 

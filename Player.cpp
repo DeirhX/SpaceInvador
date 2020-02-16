@@ -23,6 +23,19 @@ void Player::Advance(float delta)
 
 	base::Advance(delta);
 
+	thrust_fx_timer += delta;
+	if (thrust_fx_timer > thrust_fx_tick && (GetGame().GetScenes().active != GameSceneId::InvadersGameplay))
+	{
+		thrust_fx_timer = 0;
+		if (GetSpeed().GetLength() >= 2.0f)
+		{
+			float variation = Random::Next(-math::half_pi * 0.15f, math::half_pi * 0.15f);
+			Vector2 offset = -5.f * math::FromRadians(GetRotation());
+			SoundEffect::Play("ss", GetLocation() + offset, -0.2f * math::FromRadians(GetRotation() + variation));
+		}
+		
+	}
+
 	GetWorld().bounds.MakeInside(Location());
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "Renderables.h"
+#include "Decorations.h"
 
 class Player : public Renderable
 {	using base = Renderable;
@@ -7,11 +8,12 @@ class Player : public Renderable
 	static inline float ShootEnergyMax = 100.0f;
 	static inline float ShotCost = 25.0f;
 
-	float shoot_energy = ShootEnergyMax;
 	bool reloaded = true;
 	bool active = true;
-
+	float shoot_energy = ShootEnergyMax;
 	float thrust_orientation = {}; // Last orientation before using thrusters, makes strafing less confusing
+	float thrust_fx_timer = 0;
+	static constexpr float thrust_fx_tick = 2.0f;
 	Decoration crosshair{ GetSprites().Glyphs['o'], {}, Size{20, 15} };
 public:
 	Player() : Renderable(GetSprites().Player, {}, {}) { active = false; } 

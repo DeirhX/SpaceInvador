@@ -39,6 +39,7 @@ class Wormhole : public Decoration
 {
 	float fx_timer = 0;
 	static constexpr float fx_tick = 1.0f;
+	bool activated = false;
 public:
 	Wormhole(const Position& base, const Size& size)
 		: Decoration(GetSprites().Glyphs['o'], base, size)
@@ -46,8 +47,10 @@ public:
 		Tint() = 0x44ffffff;
 	}
 
-	void Advance(float delta) override;
 	[[nodiscard]] virtual EntityType GetType() const { return EntityType::Wormhole; }
+	void Advance(float delta) override;
+	void Collide(const Entity& other) override;
+	bool GetActivated() { return activated; }
 
 private:
 	using base = Decoration;
