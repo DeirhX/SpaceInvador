@@ -16,13 +16,15 @@ public:
 	
 	void Load();
 	void Save();
-	void Add(int points)
+	int Add(int points)
 	{
+		int added = (int)std::round(points * multiplier);
 		current += (int)std::round(points * multiplier);
 		max = std::max(max, current);
+		return added;
 	}
 
-	void Reset() { current = 0; }
+	void Reset() { current = 0; multiplier = 1; }
 	std::string DiscoverWorld();
 };
 

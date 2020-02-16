@@ -19,7 +19,7 @@ public:
 	Game(Sprites& sprites);
 	const Scenes& GetScenes() { return scenes; }
 	Score& Score() { return score; }
-	void AddScore(int points) { score.Add(points); }
+	int AddScore(int points) { return score.Add(points); }
 	int GetScore() { return score.current; }
 	float& Time() { return time; }
 	

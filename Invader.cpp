@@ -16,14 +16,14 @@ void Invader::Collide(const Entity& other)
 	if (other.GetType() == EntityType::PlayerProjectile )
 	{
 		auto score = 100 * (1 + ((Projectile&)other).GetGeneration());
-		auto score_str = std::to_string(score);
+		auto points_added = GetGame().AddScore(score);
+		auto score_str = std::to_string(points_added);
 		auto score_fx = SoundEffect{ score_str, GetProjection(), Vector2{0, 0}, 100.f };
 		score_fx.spread = 0.05f;
 		score_fx.spacing = 10.0f;
 		score_fx.fade_start = 50.0f;
 		SoundEffect::Play(score_fx);
 
-		GetGame().AddScore(score);
 		Life() -= 100.f;
 		Destroy();
 	}

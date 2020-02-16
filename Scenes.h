@@ -40,7 +40,7 @@ class TextScene : public Scene
 public:
 	void Begin(World& world) override
 	{
-		pressed = true;;
+		pressed = true;
 		Scene::Begin(world);
 	}
 	bool IsDone() override
@@ -63,7 +63,7 @@ public:
 	{
 		return GetWorld().invaders.Size() == 0;
 	}
-	static void GenerateEnemiesOutsideScreen(World& world, int count);
+	static void GenerateEnemiesOutsideScreen(World& world, int count, float speed_mult = 1);
 	static void GenerateEnemiesAroundPoint(World& world, Boundary bounds, int count);
 };
 
@@ -96,8 +96,9 @@ public:
 
 class GameOverScene : public TextScene
 {
+	std::string score_text;
 public:
-	void Begin(class World& world) override { time = 0; }
+	void Begin(class World& world) override;
 	void Advance(float elapsed) override;
 	void Render() override;
 	bool IsDone() override
@@ -137,7 +138,8 @@ class AmbushVictoryScene : public TextScene
 {
 	std::string next_wave_text;
 public:
-	int next_wave = 40;
+	int wave_num = 1;
+	int GetInvaderCount() const { return 40 + 5 * wave_num; }
 	void Begin(World& world) override;
 	void Render() override;
 };
