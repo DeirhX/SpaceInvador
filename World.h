@@ -5,6 +5,7 @@
 #include "Projectile.h"
 #include "Player.h"
 #include "Collider.h"
+#include "Decorations.h"
 
 // There can't be two skies.
 class World
@@ -17,6 +18,7 @@ public:
 	Renderables<Invader> invaders;
 	Renderables<Projectile> bullets;
 	Renderables<Decoration> decals;
+	Renderables<Decoration*> scene_extras;
 	std::array<Collider, 4> colliders;
 	Player player;
 
@@ -39,6 +41,7 @@ private:
 		for (auto& invader : invaders) unary_function(invader);
 		for (auto& decal: decals) unary_function(decal);
 		for (auto& collider: colliders) unary_function(collider);
+		for (auto& scene_extra : scene_extras) unary_function(*scene_extra);
 	}
 
 	void TrimEntityContainers()
@@ -46,6 +49,7 @@ private:
 		invaders.Shrink();
 		bullets.Shrink();
 		decals.Shrink();
+		scene_extras.Shrink();
 	}
 };
 

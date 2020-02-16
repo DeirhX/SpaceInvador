@@ -2,6 +2,7 @@
 #include "Scenes.h"
 #include "Sprites.h"
 #include "Game.h"
+#include "Decorations.h"
 
 void Scene::RenderText(std::string_view text, Position centre, Size size, DWORD mask)
 {
@@ -136,9 +137,9 @@ void SecondVictoryScene::Render()
 	RenderText("", { -1, y += 50 }, Size{ 12.f });
 	RenderText("enter to warp", { -1, y += 50 }, Size{ 15.f }, 0xFFFFFFFF);
 	y += 140;
-	RenderText("Your enemies have been upgraded", { -1, y += 0 }, Size{ 13.f }, 0xFFFFFFFF);
-	RenderText("They may look the same ", { -1, y += 50 }, Size{ 15.f }, 0xFFFFFFFF);
-	RenderText("but really theyre not", { -1, y += 40 }, Size{ 15.f }, 0xFFFFFFFF);
+	RenderText("your enemies have been upgraded", { -1, y += 0 }, Size{ 10.f }, 0xFFFFFFFF);
+	RenderText("they may look the same", { -1, y += 50 }, Size{ 11.f }, 0xFFFFFFFF);
+	RenderText("but really theyre not", { -1, y += 40 }, Size{ 11.f }, 0xFFFFFFFF);
 }
 
 
@@ -159,19 +160,40 @@ void ThrustGameplayScene::Begin(World& world)
 void WormholeGameplayScene::Begin(World& world)
 {
 	world = World{ Player { GetSprites().Player, {400.f, 500.f}, {50.f} } };
+	wormhole.Location() = world.bounds.GetCentre();
+	world.scene_extras.Add(&wormhole);
+	
 	for (int n = 0; n < 40; ++n)
 	{
+		Position position;
+		if (n % 5 != 0)
+		{
+			// Generate well outside visible screen
+			std::uniform_real_distribution<float> dist_pos(-500, 500);
+			position = Position{ dist_pos(Random::generator), dist_pos(Random::generator) };
+			position += GetWorld().bounds.GetCentre();
+			position.x += GetWorld().bounds.GetSize().x * ((position.x > GetWorld().bounds.GetCentre().x) ? 1 : -1);
+			position.y += GetWorld().bounds.GetSize().y * ((position.y > GetWorld().bounds.GetCentre().y) ? 1 : -1);
+		}
+		else
+		{	// Generate at wormhole
+			std::uniform_real_distribution<float> dist_pos(-40, 40);
+			position = Position{ dist_pos(Random::generator) + wormhole.GetLocation().x, dist_pos(Random::generator) + wormhole.GetLocation().y };
+		}
+		
 		auto invader = Invader{ GetSprites().Enemy,
-							   Position{ (n % 10) * 60.f + 120,(n / 10) * 60.f + 70 },
+							   position,
 							   (int)world.invaders.Size(), BouncyAI{} };
-		std::uniform_real_distribution<float> dist(-3.0f, 3.0f);
-		invader.Speed() = { dist(Random::generator), dist(Random::generator) };
+
+		std::uniform_real_distribution<float> dist_spd(-3.0f, 3.0f);
+		invader.Speed() = { dist_spd(Random::generator), dist_spd(Random::generator) };
 		world.invaders.Add(invader);
 	}
 }
 
 
-/*
+/*  Useful messages:
+ *
  *  Your ship has been upgraded. It may feel the same but really its not.
  *  Your enemies have been upgraded. They may look the same but really theyre not.
  *  You have traveled to another world. It may look the same but its really not.

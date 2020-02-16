@@ -39,6 +39,8 @@ void CollissionSolver::Clear()
 
 void CollissionSolver::Populate(Entity& renderable)
 {
+	if (!renderable.GetCollidable())
+		return;
 	for (Sector* sector : GetSectors(renderable.GetBoundary()))
 	{
 		sector->objects.push_back(&renderable);

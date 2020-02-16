@@ -53,7 +53,7 @@ struct Boundary
 {
 	Position min;
 	Position max;
-	Size size;
+	//Size size;
 
 	Boundary(Position min, Position max) : min(min), max(max)
 	{

@@ -17,6 +17,7 @@ class Entity
 protected:
 	int64_t id;
 	bool is_destroyed = false; // Re-use dead objects so we don't need expensive allocations and vector shifts
+	bool collidable = true;
 	float life = 100.0f;
 	float life_drain = 0;
 	Position location;			// True origin in world, object's centre
@@ -37,9 +38,11 @@ public:
 	[[nodiscard]] virtual EntityType GetType() const = 0;
 
 	Position& Location() { return location; }
+	void SetCollidable(bool value) { collidable = value; }
 	void SetSize(float newSize) { size = { newSize, newSize }; }
 	void SetSize(Size newSize) { size = newSize; }
-	void SetBoundary(Boundary bounds) {  location = bounds.min + 0.5f * bounds.size; }
+	void SetBoundary(Boundary bounds) {  location = bounds.min + 0.5f * bounds.GetSize(); }
+	[[nodiscard]] bool GetCollidable() { return collidable; }
 	[[nodiscard]] Size GetSize() const { return size; }
 	[[nodiscard]] Position GetLocation() const { return location; };
 	[[nodiscard]] virtual Position GetProjection() const { return location; } // Support for modifying projection of position to screen in derived classes

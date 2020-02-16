@@ -113,6 +113,7 @@ public:
 
 class WormholeGameplayScene : public GameplayScene
 {
+	Wormhole wormhole = Wormhole {  {0, 0}, {50, 40} };
 public:
 	void Begin(World& world) override;
 	bool IsDone() override
@@ -136,6 +137,7 @@ public:
 	SecondVictoryScene thrust_victory;
 	WormholeGameplayScene wormhole_game;
 
+	// Ok, this is growing ugly...
 	Scene& FromSceneId(GameSceneId id) 
 	{
 		switch (id)

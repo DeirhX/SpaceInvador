@@ -39,6 +39,9 @@
     </ClCompile>
     <ClCompile Include="AI.cpp" />
     <ClCompile Include="Score.cpp" />
+    <ClCompile Include="Decorations.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\leetlib.h">
@@ -71,5 +74,8 @@
     </ClInclude>
     <ClInclude Include="AI.h" />
     <ClInclude Include="Score.h" />
+    <ClInclude Include="Decorations.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

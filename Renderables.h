@@ -32,37 +32,6 @@ public:
 	void Render() override { DrawSprite(*this); }
 };
 
-class Decoration : public Renderable
-{	
-	using base = Renderable;
-protected:
-	float fade_begin = 0; // Life at which to being linearly fading out
-public:
-	float& FadeBegin() { return fade_begin; }
-
-	Decoration(const Sprite& sprite, const Position& base, const Size& size, const Vector2& speed = { 0, 0 })
-		: Renderable(sprite, base, size)
-	{
-		Speed() = speed;
-	}
-	Decoration(const Sprite& sprite, const Position& base, const Size& size, const Vector2& speed, float life)
-		: Decoration(sprite, base, size, speed)
-	{
-		Life() = life;
-		LifeDrain() = 1.f;
-		FadeBegin() = life;
-	}
-	[[nodiscard]] virtual EntityType GetType() const { return EntityType::Decoration; }
-	void Advance(float delta) override 
-	{
-		base::Advance(delta);
-
-		if (Life() < FadeBegin()) {
-			tint = ((uint8_t)(255 * Life() / FadeBegin())  << 24) | (0x00ffffff & Tint());
-		}
-	}
-};
-
 
 // Effective container for storing an array of renderables - deleting does not shift, dead objects can be reused later
 //  and references to live objects are valid forever.
@@ -73,6 +42,13 @@ template <typename TRenderable>
 class Renderables
 {
 	using Container = std::deque<TRenderable>;  // As long we grow/shrink on start/end, element references are valid forever
+
+	// Various ways to get to IsDestroyed - value type vs. pointer type
+	template <typename T, typename std::enable_if_t<!std::is_pointer<T>::value> * = 0>
+	static bool IsDestroyed(T val) { return val.IsDestroyed(); }
+	template <typename T, typename std::enable_if_t<std::is_pointer<T>::value> * = 0>
+	static bool IsDestroyed(T val) { return val->IsDestroyed(); }
+	
 	class iterator
 	{
 		Container& container; 
@@ -83,7 +59,7 @@ class Renderables
 		bool operator!= (iterator other) { return it != other.it; }
 		iterator operator++() // prefix increment
 		{	// Advance over dead elements
-			while (++it != container.end() && (*it).IsDestroyed()) { };
+			while (++it != container.end() && IsDestroyed(*it)) { };
 			return *this;
 		}
 	};
@@ -95,7 +71,7 @@ public:
 	
 	TRenderable& Add(TRenderable item)
 	{
-		auto& dead_item = std::find_if(vector.begin(), vector.end(), [this](auto it) { return it.IsDestroyed(); });
+		auto& dead_item = std::find_if(vector.begin(), vector.end(), [this](auto val) { return IsDestroyed(val); });
 		if (dead_item != vector.end()) {
 			*dead_item = item;
 			return *dead_item;
@@ -108,16 +84,16 @@ public:
 	}
 	void Shrink()
 	{	// Slice out dead objects on the beginning and end of deque. Don't invalidate references.
-		while (!vector.empty() && vector.front().IsDestroyed())
+		while (!vector.empty() && Renderables::IsDestroyed(vector.front()))
 			vector.pop_front();
-		while (!vector.empty() && vector.back().IsDestroyed())
+		while (!vector.empty() && Renderables::IsDestroyed(vector.back()))
 			vector.pop_back();
 	}
 
 	iterator begin()
 	{	// Skip dead elements at the start
 		auto it = iterator(vector, vector.begin());
-		while (it != end() && (*it).IsDestroyed())
+		while (it != end() && IsDestroyed(*it))
 			++it;
 		return it;
 	}

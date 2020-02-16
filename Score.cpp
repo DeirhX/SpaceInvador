@@ -35,10 +35,10 @@ std::string Score::DiscoverWorld()
 	
 	auto vowels = "aeiou"; // y sucks
 	std::normal_distribution<float> dist(5, 5);
-	int length = 2 + (int)std::round(dist(Random::generator));
+	int length = std::max(2, (int)std::round(dist(Random::generator)));
 	for (int i=0; i < length; ++i)
 	{
-		if (i % 3 == 1)
+		if (i % 4 == 1)
 			name += vowels[Random::Next(5)];
 		else
 			name += 'a' + Random::Next('z' - 'a');

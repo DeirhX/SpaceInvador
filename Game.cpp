@@ -6,7 +6,7 @@ Game::Game(Sprites& sprites) :
 	sprites(sprites),
 	world ({})
 {
-	scenes.active = GameSceneId::Intro;
+	scenes.active = GameSceneId::ThrustVictory;
 }
 
 bool Game::WantQuit()
@@ -73,27 +73,3 @@ Game& GetGame()
 	return game;
 }
 
-// PerformanceTimer 
-PerformanceTimer::PerformanceTimer()
-{
-	QueryPerformanceFrequency(&frequency);
-	QueryPerformanceCounter(&last);
-}
-
-float PerformanceTimer::ElapsedSinceLast()
-{
-	LARGE_INTEGER now;
-	QueryPerformanceCounter(&now);
-	LARGE_INTEGER diff;
-	diff.QuadPart = now.QuadPart - last.QuadPart;
-	diff.QuadPart *= 1000000; // Prevent loss of precision
-	diff.QuadPart /= frequency.QuadPart;
-
-	last = now;
-	return (float)diff.QuadPart / 1000000;
-}
-
-int Random::Next(int upper_bound)
-{
-	return generator() % upper_bound;
-}
