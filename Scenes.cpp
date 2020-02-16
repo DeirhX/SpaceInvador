@@ -103,7 +103,7 @@ void GameplayScene::Begin(World& world)
 	{
 		world.invaders.Add({ GetSprites().Enemy,
 							 Position{ (n % 10) * 60.f + 120,(n / 10) * 60.f + 70 },
-							 (int)world.invaders.Size(), JohnnyLeetAI{n + 1} });
+							 (int)world.invaders.Size(), JimmyLeetAI{n + 1} });
 	}
 }
 

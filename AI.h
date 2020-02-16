@@ -6,20 +6,20 @@
 // 
 enum class AIType
 {
-	JohnnyLeet,
+	JimmyLeet,
 	Bouncy,
 };
 
 // Must NOT contain non-trivial types. Will be copied inside an union.
-class JohnnyLeetAI
+class JimmyLeetAI
 {
 	flaot time_elapsed;
 	int   seed;
 	int   last_xo;
 	int   last_yo;
 public:
-	JohnnyLeetAI() = default;
-	JohnnyLeetAI(int seed) : seed(seed), time_elapsed(0), last_xo(0), last_yo(0) {}
+	JimmyLeetAI() = default;
+	JimmyLeetAI(int seed) : seed(seed), time_elapsed(0), last_xo(0), last_yo(0) {}
 
 	// I could make them virtual but that would be one additional indirection! Never!
 	void Advance(float delta, class Renderable& entity);
@@ -43,12 +43,12 @@ class SyntheticIntelligence
 	union ai_union_t
 	{	// Screw polymorphism, unite into an union!
 		// Enter the fascinating world of low-level direct memory accesses 
-		JohnnyLeetAI johnny;
+		JimmyLeetAI johnny;
 		BouncyAI bouncy;
 	} ai_union;
 
 public:
-	SyntheticIntelligence(JohnnyLeetAI&& ai) : type(AIType::JohnnyLeet) { ai_union.johnny = ai;	}  //, ai_union{ .johnny = ai }  /* only in C++20, let's not require it */
+	SyntheticIntelligence(JimmyLeetAI&& ai) : type(AIType::JimmyLeet) { ai_union.johnny = ai;	}  //, ai_union{ .johnny = ai }  /* only in C++20, let's not require it */
 	SyntheticIntelligence(BouncyAI&& ai) : type(AIType::Bouncy) { ai_union.bouncy = ai; }
 
 	// So much better than a v-table call!
@@ -58,7 +58,7 @@ public:
 	{
 		switch (type)
 		{
-		case AIType::JohnnyLeet: ai_union.johnny.Advance(delta, invader); break;
+		case AIType::JimmyLeet: ai_union.johnny.Advance(delta, invader); break;
 		case AIType::Bouncy: ai_union.bouncy.Advance(delta, invader); break;
 		default: throw std::exception("Missing case");
 		}
@@ -68,7 +68,7 @@ public:
 	{
 		switch (type) 
 		{
-		case AIType::JohnnyLeet: ai_union.johnny.OnCollide(source, target); break;
+		case AIType::JimmyLeet: ai_union.johnny.OnCollide(source, target); break;
 		case AIType::Bouncy: ai_union.bouncy.OnCollide(source, target); break;
 		default: throw std::exception("Missing case");
 		}

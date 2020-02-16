@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector.h"
 
-// Note: not really audio sound. Johnny Leet didn't leave us audio assets. So we're simulate them with what little we have!
+// Note: not really audio sound. Jimmy Leet didn't leave us audio assets. So we're simulate them with what little we have!
 class SoundEffect
 {
 public:

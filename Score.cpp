@@ -3,6 +3,7 @@
 #include <fstream>
 #include "Score.h"
 #include "PhatLeetLib.h"
+#include "World.h"
 
 Score::Score()
 {
@@ -27,6 +28,16 @@ void Score::Save()
 {
 	std::fstream file(filepath, std::ios::out);
 	file << max;
+}
+
+int Score::Add(int points)
+{
+	if (!GetWorld().player.IsAlive())
+		return 0;
+	int added = (int)std::round(points * multiplier);
+	current += (int)std::round(points * multiplier);
+	max = std::max(max, current);
+	return added;
 }
 
 std::string Score::DiscoverWorld()
